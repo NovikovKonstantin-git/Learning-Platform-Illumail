@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-sm-6 mb-3 mb-sm-0 px-sm-5 mt-3">
+        <div class="card" style="width: 40rem;">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><h2>{{ posts.title }}</h2></li>
+                <li class="list-group-item"><h6>Создано: {{ posts.time_create }} | Изменено: {{ posts.time_update }}</h6></li>
+                <li class="list-group-item"><h4>{{ posts.content }}</h4></li>
+                <li class="list-group-item">
+                    {% if posts.file %}
+                    <object data="data/test.pdf" type="application/docx" width="300" height="200">
+                        <a href="{{ posts.file.url }}">{{ posts.file }}</a>
+                    </object>
+<!--                    <h4>{{ posts.file }}</h4>-->
+                    {% endif %}
+                </li>
+                <li class="list-group-item">
+                    {% if posts.photo %}
+                    <p><img src="{{ posts.photo.url }}" alt="" width="400"></p>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-sm-4 mt-3 px-sm-5">
+        <div class="card">
+            <h5 class="card-header">Выполненные задания</h5>
+            <div class="card-body">
+                <h5 class="card-title">Прикрепите сюда выполненные здания</h5>
+                <div class="d-grid gap-2">
+                    <a href="#" class="btn btn-outline-secondary">+ Добавить или сдать</a>
+                    <a href="#" class="btn btn-secondary">Сдать</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

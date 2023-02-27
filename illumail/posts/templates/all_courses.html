@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% for c in courses %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-sm-4 mb-3 mb-sm-0 px-sm-5 mt-3">
+            <div class="card">
+                {% if c.photo %}
+                <p><img src="{{ c.photo.url }}" alt="" class="card-img-top"></p>
+                {% endif %}
+                <div class="card-header">
+                    <h6>Создано: {{ c.time_create }} Изменено: {{ c.time_update }}</h6>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'show_posts' c.pk %}" class="btn btn-outline-secondary">{{ c.title }}</a>
+                        <a href="#" class="btn btn-secondary">Покинуть курс</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+{% endblock %}

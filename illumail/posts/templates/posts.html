@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% for p in posts %}
+
+<div class="row">
+    <div class="col-sm-6 mb-3 mb-sm-0 px-sm-5 mt-4">
+        <div class="card" style="width: 40rem;">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><h3>{{ p.title }}</h3></li>
+                <li class="list-group-item"><h6>Создано: {{ p.time_create }} | Изменено: {{ p.time_update }}</h6></li>
+                <li class="list-group-item">
+                    <a href="{{ p.get_absolute_url }}" class="btn btn-secondary">Посмотреть задание</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+
