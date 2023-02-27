@@ -1,3 +1,4 @@
 .idea
 venv
-illumail/my.cnf
+my.cnf
+__pycache__
