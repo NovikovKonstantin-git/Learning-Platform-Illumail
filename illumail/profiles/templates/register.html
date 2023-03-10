@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="{% static 'profiles/css/styles.css' %}">
+</head>
+<body>
+{% block content %}
+
+{% if form.errors %}
+<p>{{ form.errors.error }}</p>
+{% endif %}
+
+<form action="{% url 'register' %}" method="post">
+    {% csrf_token %}
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+                <h2>Регистрация</h2>
+                <div class="inputbox">
+                    {{ form_profile.first_name }}
+                    <label>Имя</label>
+                </div>
+                <div class="inputbox">
+                    {{ form_profile.last_name }}
+                    <label>Фамилия</label>
+                </div>
+                <div class="inputbox">
+                    {{ form_profile.patronymic }}
+                    <label>Отчество</label>
+                </div>
+                <div class="inputbox">
+                    {{ form.username }}
+                    <label>Имя пользователя</label>
+                </div>
+                <div class="inputbox">
+                    {{ form.email }}
+                    <label>Адрес электронной почты</label>
+                </div>
+                <div class="inputbox">
+                    {{ form.password1 }}
+                    <label>Пароль</label>
+                </div>
+                <div class="inputbox">
+                    {{ form.password2 }}
+                    <label>Пароль</label>
+                </div>
+
+
+                <button>Зарегистрироваться</button>
+                <div class="register">
+                    <p>У Вас есть аккаунт?</p>
+                    <p><a href="{% url 'login' %}">Вход</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</form>
+
+<!--    {{ form.as_p }}-->
+<!--    {{ form_profile.as_p }}-->
+<!--    <button>fhfhfh</button>-->
+{% endblock %}
+</body>
+</html>

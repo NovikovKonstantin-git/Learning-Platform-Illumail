@@ -1,3 +1,9 @@
 body{
-    background-color: black;
+    background-color: white;
+}
+
+.completed-tasks{
+    float: right;
+    margin: 0 1.5%;
+    width: 30%;
 }

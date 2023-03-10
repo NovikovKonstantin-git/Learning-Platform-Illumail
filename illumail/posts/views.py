@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import *
+from .forms import *
 
 
 def show_all_courses(request):
@@ -27,14 +28,6 @@ def show_posts(request, course_id):
     return render(request, 'posts.html', context)
 
 
-# def show_specific_task(request, post_id):
-#     posts = Posts.objects.get(pk=post_id)
-#     context = {
-#         'posts': posts,
-#         "title": f"Задание {post_id}",
-#     }
-#     return render(request, 'specific_task.html', context)
-
 def show_specific_task(request, course_id, post_id):
     posts = Posts.objects.get(pk=post_id)
     course = Courses.objects.get(pk=course_id)
@@ -43,3 +36,8 @@ def show_specific_task(request, course_id, post_id):
         "title": f"Задание {post_id}",
     }
     return render(request, 'specific_task.html', context)
+
+
+def create_course(request):
+    form = CreateCourseForm
+    return render(request, 'add_course.html', {'form': form})

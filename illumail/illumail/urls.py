@@ -6,7 +6,7 @@ from profiles.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('profile/', include('profiles.urls')),
+    path('', include('profiles.urls')),
     path('', include('posts.urls')),
 ]
 
