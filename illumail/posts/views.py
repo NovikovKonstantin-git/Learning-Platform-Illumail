@@ -46,7 +46,7 @@ def create_course(request):
             return redirect('show_all_courses')
     else:
         form = CreateCourseForm()
-    return render(request, 'add_course.html', {'form': form})
+    return render(request, 'add_course.html', {'form': form, "title": "Создание курса"})
 
 
 def join_the_course(request):

@@ -12,15 +12,19 @@
         {{ form.photo }}
         <br>
         <label>Изображение курса</label>
+
         {% if form.photo %}
         <p><img class="img-article-left thumb" src="{{ form.photo.url }}" alt=""></p>
         {% endif %}
+
         <br>
         <label>Тип курса</label>
         {{ form.type_course }}<br><br>
-        {% if form.type_course == '1' %}
+
+        {% if form.type_course == 1 %}
         <label>Привет</label>
         {% endif %}
+
         <button class="btn btn-success">Создать курс</button>
     </div>
 </form>
