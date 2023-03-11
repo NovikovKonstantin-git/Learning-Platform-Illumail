@@ -13,7 +13,7 @@
 <p>{{ form.errors.error }}</p>
 {% endif %}
 
-<form action="{% url 'register' %}" method="post">
+<form action="{% url 'register_user' %}" method="post">
     {% csrf_token %}
     <section>
         <div class="form-box">
@@ -52,7 +52,7 @@
                 <button>Зарегистрироваться</button>
                 <div class="register">
                     <p>У Вас есть аккаунт?</p>
-                    <p><a href="{% url 'login' %}">Вход</a></p>
+                    <p><a href="{% url 'login_user' %}">Вход</a></p>
                 </div>
             </div>
         </div>

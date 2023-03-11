@@ -2,11 +2,27 @@
 {% load static %}
 
 {% block content %}
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {% for f in form %}
-    <p>{{ f.label }}</p>
-    <input>
-    {% endfor %}
+    <div class="container">
+        {{ form.title }}
+        <label>Название курса</label>
+        <br>
+        <br>
+        {{ form.photo }}
+        <br>
+        <label>Изображение курса</label>
+        {% if form.photo %}
+        <p><img class="img-article-left thumb" src="{{ form.photo.url }}" alt=""></p>
+        {% endif %}
+        <br>
+        <label>Тип курса</label>
+        {{ form.type_course }}<br><br>
+        {% if form.type_course == '1' %}
+        <label>Привет</label>
+        {% endif %}
+        <button class="btn btn-success">Создать курс</button>
+    </div>
 </form>
+
 {% endblock %}

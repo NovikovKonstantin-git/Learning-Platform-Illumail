@@ -17,7 +17,7 @@ class PostsAdmin(admin.ModelAdmin):
 
 
 class CoursesAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'get_html_photo', 'time_create', 'time_update')
+    list_display = ('id', 'title', 'get_html_photo', 'type_course', 'time_create', 'time_update')
     list_display_links = ('id', 'title')
 
     def get_html_photo(self, object):

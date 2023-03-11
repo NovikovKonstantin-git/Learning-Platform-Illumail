@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
 
@@ -39,5 +39,15 @@ def show_specific_task(request, course_id, post_id):
 
 
 def create_course(request):
-    form = CreateCourseForm
+    if request.method == "POST":
+        form = CreateCourseForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('show_all_courses')
+    else:
+        form = CreateCourseForm()
     return render(request, 'add_course.html', {'form': form})
+
+
+def join_the_course(request):
+    return render(request, 'join_the_course.html')

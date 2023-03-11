@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -44,3 +44,11 @@ def login_user(request):
     return render(request, 'login.html')
 
 
+def logout_user(request):
+    logout(request)
+    return redirect('show_all_courses')
+
+
+def my_profile(request, user_id):
+    profiles = Profile.objects.get(user=user_id)
+    return render(request, 'my_profile.html', {'profiles': profiles})

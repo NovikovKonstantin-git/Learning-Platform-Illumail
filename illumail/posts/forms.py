@@ -5,5 +5,5 @@ from .models import *
 class CreateCourseForm(forms.ModelForm):
     class Meta:
         model = Courses
-        fields = '__all__'
+        fields = ['title', 'photo', 'type_course']
 
