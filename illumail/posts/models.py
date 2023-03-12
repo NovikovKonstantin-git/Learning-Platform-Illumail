@@ -33,7 +33,7 @@ class Courses(models.Model):
     photo = models.ImageField(upload_to='courses_header_image/%Y/%m/%d', blank=True, verbose_name='Изображение курса', default='dflt_crs_hdrs.jpg')
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     time_update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
-    type_course = models.CharField(max_length=200, choices=CHOICES, default=1)
+    type_course = models.CharField(max_length=200, choices=CHOICES, default='1')
 
     def __str__(self):
         return self.title

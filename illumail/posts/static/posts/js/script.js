@@ -1,0 +1,35 @@
+function handleFileSelect(evt) {
+    var photo = evt.target.files;
+    var p = photo[0];
+
+    if (!p.type.match('image.*')) {
+        alert("Image only please....");
+    }
+    var reader = new FileReader();
+
+    reader.onload = (function(theFile) {
+        return function(e) {
+
+            var span = document.createElement('span');
+            span.innerHTML = ['<img class="thumb" width="300" title="', escape(theFile.name), '" src="', e.target.result, '" />'].join('');
+            document.getElementById('output').insertBefore(span, null);
+        };
+    })(p);
+
+    reader.readAsDataURL(p);
+}
+document.getElementById('photo').addEventListener('change', handleFileSelect, false);
+
+document.getElementById('security').onclick = function() {
+      document.getElementById('text').hidden = false;
+      document.getElementById('text2').hidden = true;
+    }
+document.getElementById('public').onclick = function() {
+      document.getElementById('text').hidden = true;
+    }
+document.getElementById('paid').onclick = function() {
+      document.getElementById('text').hidden = true;
+      document.getElementById('text2').hidden = false;
+    }
+
+

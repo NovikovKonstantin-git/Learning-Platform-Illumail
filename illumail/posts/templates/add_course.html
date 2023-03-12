@@ -9,24 +9,41 @@
         <label>Название курса</label>
         <br>
         <br>
-        {{ form.photo }}
+        {# Вывод загруженного изображения #}
+        <div class="row">
+            <label>Загрузите изображение:</label>
+            <input type="file" id="photo" name="photo"/>
+        </div>
+        <div class="row">
+            <span id="output"></span>
+        </div>
+
+
         <br>
-        <label>Изображение курса</label>
+        <label>Тип курса</label><br>
 
-        {% if form.photo %}
-        <p><img class="img-article-left thumb" src="{{ form.photo.url }}" alt=""></p>
-        {% endif %}
+        <input type="radio" id="public" name="type_course" value="1">
+        <label for="public">Публичный</label><br>
 
-        <br>
-        <label>Тип курса</label>
-        {{ form.type_course }}<br><br>
+        <input type="radio" id="security" name="type_course" value="2">
+        <label for="security">Доступ по коду</label><br>
+        <div id="text" hidden="true">Text</div>
 
-        {% if form.type_course == 1 %}
-        <label>Привет</label>
-        {% endif %}
+
+        <br> <input type="radio" id="paid" name="type_course" value="3"">
+        <label for="paid">Платный</label><br>
+        <div id="text2" hidden="true">Цена</div>
 
         <button class="btn btn-success">Создать курс</button>
+
     </div>
 </form>
+
+{% block javascript %}
+    <script src="{% static 'posts/js/script.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+{% endblock %}
+
 
 {% endblock %}
