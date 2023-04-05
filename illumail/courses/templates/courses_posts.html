@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    {% for p in posts %}
+    <div class="card">
+        <h3>{{ p.title }}</h3>
+        Дата создания: {{ p.time_created }} |
+        Дата изменения: {{ p.time_updated }} <br> <br>
+        <a class="btn btn-secondary" href="{{ p.get_absolute_url }}">Подробнее</a>
+    </div>
+    <br>
+    {% endfor %}
+</div>
+{% endblock %}

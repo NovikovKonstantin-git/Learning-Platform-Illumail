@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+    <div class="container">
+        {% csrf_token %}
+        Фото на данный момент: <br>
+        <img src="{{ user.photo.url }}" alt="" width="200"> <br>
+
+        <div class="row">
+            <label>Новое фото профиля:</label>
+            <input type="file" id="id_photo" name="photo"/>
+        </div>
+        <div class="row">
+            <span id="output"></span>
+        </div>
+        <br>
+
+        Имя: {{ form.first_name }} <br>
+        Фамилия: {{ form.last_name }} <br>
+        Отчество: {{ form.patronymic }} <br>
+        Имя пользователя: {{ form.username }} <br>
+        Эл.почта: {{ form.email }} <br>
+        О себе: {{ form.bio }} <br>
+        Пароль: {{ form.password }} <br>
+
+        <button class="btn btn-secondary">Сохранить</button>
+    </div>
+</form>
+
+{% block javascript %}
+<script src="{% static 'users/js/script.js' %}"></script>
+{% endblock %}
+
+{% endblock %}

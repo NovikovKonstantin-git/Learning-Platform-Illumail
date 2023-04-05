@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="{% static 'users/css/styles.css' %}">
+</head>
+<body>
+{% block content %}
+<form method="post" autocomplete="off">
+    {% csrf_token %}
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+                <h2>Регистрация</h2>
+                <div class="inputbox">
+                    {{ form.first_name }}
+                    <label>{{ form.first_name.label }}</label>
+                </div>
+                <div class="inputbox">
+                    {{ form.last_name }}
+                    <label>{{ form.last_name.label }}</label>
+                </div>
+                <div class="inputbox">
+                    {{ form.patronymic }}
+                    <label>{{ form.patronymic.label }}</label>
+                </div>
+                <div class="inputbox">
+                    {{ form.email }}
+                    <label>{{ form.email.label }}</label>
+                </div>
+                <div class="inputbox">
+                    <input name="username" required>
+                    <label>{{ form.username.label }}</label>
+                </div>
+                <div class="inputbox">
+                    <input name="password1" required>
+                    <label>{{ form.password1.label }}</label>
+                </div>
+                <div class="inputbox">
+                    <input name="password2" required>
+                    <label>{{ form.password2.label }}</label>
+                </div>
+                <button>Регистрация</button>
+                <div class="register">
+                    <p>У Вас есть аккаунт?</p>
+                    <p><a href="{% url 'login_user' %}">Вход</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</form>
+
+{% endblock %}
+</body>
+</html>
