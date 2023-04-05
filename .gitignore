@@ -1,0 +1,6 @@
+.idea/
+venv/
+__pycache__
+media/
+my.cnf
+db.sqlite3
