@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+    <div class="container">
+        {% csrf_token %}
+
+        Название курса: {{ form.title }}
+        <p>Изображение курса на данный момент:</p>
+        <p><img src="{{ course.course_photo.url }}" alt="" width="350"></p>
+
+        <div class="row">
+            <label>Новое фото курса:</label>
+            <input type="file" id="id_course_photo" name="course_photo"/>
+        </div>
+        <div class="row">
+            <br>
+            <span id="output"></span>
+        </div>
+        <br>
+
+        <button class="btn btn-secondary">Изменить</button>
+    </div>
+</form>
+
+{% block javascript %}
+<script src="{% static 'courses/js/script.js' %}"></script>
+{% endblock %}
+
+{% endblock %}

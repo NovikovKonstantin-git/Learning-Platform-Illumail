@@ -4,7 +4,9 @@
 <div class="container">
     {% for c in courses %}
     <div class="card" style="width: 21rem; display: inline-block; margin-right: 30px; margin-bottom: 30px;">
-        <h3 align="center">{{ c.title }}</h3>
+        <div class="card-header">
+            <h3 align="center">{{ c.title }}</h3>
+        </div>
         {% if c.course_photo %}
         <img src="{{ c.course_photo.url }}" class="card-img-top" alt="" height="175"> <br>
         {% endif %}
@@ -12,7 +14,11 @@
         Дата изменения: {{ c.time_updated }} <br>
         Автор: {{ c.author }} ({{ c.author.first_name }}) <br>
         <div class="d-grid gap-2">
-        <a class="btn btn-secondary" href="{{ c.get_absolute_url }}">Подробнее</a>
+            <a class="btn btn-secondary" href="{{ c.get_absolute_url }}">Подробнее</a>
+            {% if request.user == c.author %}
+            <a class="btn btn-secondary" href="{% url 'update_course' c.id %}">Изменить</a>
+            <a class="btn btn-secondary" href="{% url 'delete_course' c.id %}">Удалить</a>
+            {% endif %}
         </div>
     </div>
     {% endfor %}

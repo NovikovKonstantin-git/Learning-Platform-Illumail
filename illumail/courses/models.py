@@ -5,7 +5,7 @@ from users.models import CustomUser
 
 class Courses(models.Model):
     title = models.CharField(max_length=300, verbose_name='Название')
-    course_photo = models.ImageField(upload_to='courses_headers/%Y/%m/%d', blank=True, verbose_name='Изображение курса')
+    course_photo = models.ImageField(upload_to='courses_headers/%Y/%m/%d', default='dflt_crs_hdrs.jpg', verbose_name='Изображение курса')
     time_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     time_updated = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
     author = models.ForeignKey(CustomUser, on_delete=models.PROTECT, verbose_name='Автор курса')
@@ -19,7 +19,7 @@ class Courses(models.Model):
     class Meta:
         verbose_name = 'Курс'
         verbose_name_plural = 'Курсы'
-        ordering = ['title', ]
+        ordering = ['-time_created', ]
 
 
 class Posts(models.Model):

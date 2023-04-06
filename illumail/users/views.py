@@ -45,3 +45,7 @@ def update_profile(request, id):
             form.save()
             return redirect('my_profile', id)
     return render(request, 'update_profile.html', {'form': form})
+
+
+
+

@@ -15,6 +15,7 @@
 <a>Добро пожаловать, {{ user.username }}</a>
 <a class="btn btn-secondary" href="{% url 'logout_user' %}">Выйти</a>
 <a class="btn btn-secondary" href="{{ user.get_absolute_url }}">Мой профиль</a>
+<a class="btn btn-secondary" href="{% url 'create_course' %}">Создать курс</a>
 <hr>
 {% else %}
 <a class="btn btn-secondary" href="{% url 'login_user' %}">Войти</a>
