@@ -6,7 +6,8 @@
     <div class="container">
         {% csrf_token %}
 
-        Название курса: {{ form.title }}
+        <p>Название курса: {{ form.title }}<p>
+        <p>Описание курса: {{ form.about_the_course }}</p>
         <p>Изображение курса на данный момент:</p>
         <p><img src="{{ course.course_photo.url }}" alt="" width="350"></p>
 
@@ -14,13 +15,13 @@
             <label>Новое фото курса:</label>
             <input type="file" id="id_course_photo" name="course_photo"/>
         </div>
+        <br>
         <div class="row">
-            <br>
             <span id="output"></span>
         </div>
         <br>
 
-        <button class="btn btn-secondary">Изменить</button>
+        <button class="btn btn-secondary">Сохранить изменения</button>
         <br> <br>
     </div>
 </form>
