@@ -1,50 +1,50 @@
-from django.contrib.auth import logout, login, authenticate
+from django.contrib.auth import login
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, CreateView, UpdateView
+from django.contrib.auth.views import LogoutView, LoginView
 from .forms import RegisterUser, UpdateProfileForm
 from .models import CustomUser
 
 
-def register_user(request):
-    if request.method == "POST":
-        form = RegisterUser(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('show_courses')
-    else:
-        form = RegisterUser()
-    return render(request, 'register.html', {'form': form})
+class RegisterNewUser(CreateView):
+    form_class = RegisterUser
+    template_name = 'register.html'
+    extra_context = {'title': 'Регистрация'}
 
-
-def logout_user(request):
-    logout(request)
-    return redirect('show_courses')
-
-
-def login_user(request):
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
         return redirect('show_courses')
-    return render(request, 'login.html')
 
 
-def my_profile(request, id):
-    profile = CustomUser.objects.get(id=id)
-    return render(request, 'my_profile.html', {'profile': profile})
+class LogoutUser(LogoutView):
+    next_page = 'show_courses'
 
 
-def update_profile(request, id):
-    profile = CustomUser.objects.get(id=id)
-    form = UpdateProfileForm(instance=profile)
-    if request.method == "POST":
-        form = UpdateProfileForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            form.save()
-            return redirect('my_profile', id)
-    return render(request, 'update_profile.html', {'form': form})
+class LoginUser(LoginView):
+    template_name = 'login.html'
+    next_page = reverse_lazy('show_courses')
+
+
+class MyProfile(DetailView):
+    model = CustomUser
+    template_name = 'my_profile.html'
+    context_object_name = 'profile'
+    extra_context = {'title': 'Мой профиль'}
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+
+class UpdateProfile(UpdateView):
+    form_class = UpdateProfileForm
+    template_name = 'update_profile.html'
+    extra_context = {'title': 'Изменение профиля'}
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
 
 
 
