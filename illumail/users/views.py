@@ -25,6 +25,7 @@ class LogoutUser(LogoutView):
 class LoginUser(LoginView):
     template_name = 'login.html'
     next_page = reverse_lazy('show_courses')
+    extra_context = {'title': 'Вход'}
 
 
 class MyProfile(DetailView):
