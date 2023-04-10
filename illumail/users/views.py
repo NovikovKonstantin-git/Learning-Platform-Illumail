@@ -2,10 +2,9 @@ from django.contrib.auth import login
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView
-from django.contrib.auth.views import LogoutView, LoginView
-from .forms import RegisterUser, UpdateProfileForm
+from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView
+from .forms import RegisterUser, UpdateProfileForm, NewPasswordForm
 from .models import CustomUser
-
 
 class RegisterNewUser(CreateView):
     form_class = RegisterUser
@@ -45,6 +44,13 @@ class UpdateProfile(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class NewPassword(PasswordChangeView):
+    form_class = NewPasswordForm
+    template_name = 'new_password.html'
+    success_url = reverse_lazy('show_courses')
+    extra_context = {'title': 'Смена пароля'}
 
 
 
