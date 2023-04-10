@@ -2,10 +2,12 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('courses/', show_courses, name='show_courses'),
+    path('courses/', ShowCourses.as_view(), name='show_courses'),
     path('courses/<int:course_id>/posts/', show_posts, name='show_posts'),
     path('courses/<int:course_id>/posts/<int:post_id>/', show_specific_post, name='show_specific_post'),
-    path('courses/create/', create_course, name='create_course'),
-    path('courses/<int:id>/update/', update_course, name='update_course'),
-    path('course/<int:id>/delete/', delete_course, name='delete_course'),
+    path('courses/create/', CreateCourse.as_view(), name='create_course'),
+    path('courses/<int:pk>/update/', UpdateCourse.as_view(), name='update_course'),
+    path('courses/<int:pk>/delete/', delete_course, name='delete_course'),
+    path('courses/search/', SearchCourse.as_view(), name='search_course'),
+    path('courses/teaching/', Teaching.as_view(), name='teaching'),
 ]

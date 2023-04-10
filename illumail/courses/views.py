@@ -1,18 +1,22 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from .models import Courses, Posts, CompletedTaskModel
 from .forms import ComplitedTaskForm, CreateOrUpdateCourseForm
+from django.views.generic import ListView, DeleteView, UpdateView, DetailView, CreateView
 
 
-def show_courses(request):
-    courses = Courses.objects.all()
-    return render(request, 'courses.html', {'courses': courses})
+class ShowCourses(ListView):
+    model = Courses
+    template_name = 'courses.html'
+    context_object_name = 'courses'
+    extra_context = {'title': 'Курсы'}
 
 
 def show_posts(request, course_id):
+    course = Courses.objects.get(id=course_id)
     posts = Posts.objects.filter(course_id=course_id)
-    return render(request, 'courses_posts.html', {'posts': posts})
+    return render(request, 'courses_posts.html', {'posts': posts, 'course': course})
 
 
 def show_specific_post(request, course_id, post_id):
@@ -35,38 +39,56 @@ def show_specific_post(request, course_id, post_id):
     context = {
         'posts_in_course': posts_in_course,
         'post': post,
-        'form': form
+        'form': form,
     }
     return render(request, 'specific_post.html', context)
 
 
-def create_course(request):
-    form = CreateOrUpdateCourseForm(request.POST, request.FILES)
-    if request.method == "POST":
-        if form.is_valid():
-            fs = form.save(commit=False)
-            fs.author = request.user
-            fs.save()
-            return redirect('show_courses')
-    else:
-        form = CreateOrUpdateCourseForm()
-    return render(request, 'create_course.html', {'form': form})
+class CreateCourse(CreateView):
+    form_class = CreateOrUpdateCourseForm
+    template_name = 'create_course.html'
+    success_url = reverse_lazy('teaching')
+    extra_context = {'title': 'Создание курса'}
+
+    def form_valid(self, form):
+        fs = form.save(commit=False)
+        fs.author = self.request.user
+        fs.save()
+        return redirect('show_courses')
 
 
-def update_course(request, id):
-    course = Courses.objects.get(id=id)
-    form = CreateOrUpdateCourseForm(instance=course)
-    if request.method == "POST":
-        form = CreateOrUpdateCourseForm(request.POST, request.FILES, instance=course)
-        if form.is_valid():
-            fs = form.save(commit=False)
-            fs.author = request.user
-            fs.save()
-            return redirect('show_courses')
-    return render(request, 'update_course.html', {'form': form, 'course': course})
+class UpdateCourse(UpdateView):
+    form_class = CreateOrUpdateCourseForm
+    template_name = 'update_course.html'
+    extra_context = {'title': 'Изменить курс'}
+    context_object_name = 'course'
+    queryset = Courses.objects.all()
+
+    def form_valid(self, form):
+        fs = form.save(commit=False)
+        fs.author = self.request.user
+        fs.save()
+        return redirect('show_courses')
 
 
-def delete_course(request, id):
-    course = Courses.objects.get(id=id)
+def delete_course(request, pk):
+    course = Courses.objects.get(id=pk)
     course.delete()
     return HttpResponseRedirect(reverse('show_courses'))
+
+
+class SearchCourse(ListView):
+    model = Courses
+    template_name = 'courses.html'
+    context_object_name = 'courses'
+    extra_context = {'title': 'Поиск курсов'}
+
+    def get_queryset(self):
+        return Courses.objects.filter(title__icontains=self.request.GET.get('search', ''))
+
+
+class Teaching(ListView):
+    model = Courses
+    template_name = 'teaching.html'
+    context_object_name = 'courses'
+    extra_context = {'title': 'Преподавание'}
