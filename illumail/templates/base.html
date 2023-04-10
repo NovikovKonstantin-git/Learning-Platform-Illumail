@@ -9,25 +9,28 @@
 </head>
 <body>
 <br>
-<a class="btn btn-secondary" href="{% url 'show_courses' %}">Каталог</a>
+<div class="container">
+    <a class="btn btn-secondary" href="{% url 'show_courses' %}">Каталог</a>
 
-<form action="{% url 'search_course' %}" method="get" class="form-inline" style="display: inline-block; float:right;">
-    <input autocomplete="off" type="search" placeholder="Поиск курса"
-           aria-label="Search" name="search">
-    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Искать</button>
-</form>
+    <form action="{% url 'search_course' %}" method="get" class="form-inline"
+          style="display: inline-block; float:right;">
+        <input autocomplete="off" type="search" placeholder="Поиск курса"
+               aria-label="Search" name="search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Искать</button>
+    </form>
 
-{% if user.is_authenticated %}
-<a class="btn btn-secondary" href="{{ user.get_absolute_url }}">Мой профиль</a>
-<a class="btn btn-outline-secondary" href="#">Обучение</a>
-<a class="btn btn-secondary" href="{% url 'teaching' %}">Преподавание</a>
-<hr>
+    {% if user.is_authenticated %}
+    <a class="btn btn-secondary" href="{{ user.get_absolute_url }}">Мой профиль</a>
+    <a class="btn btn-outline-secondary" href="#">Обучение</a>
+    <a class="btn btn-secondary" href="{% url 'teaching' %}">Преподавание</a>
+    <hr>
 
-{% else %}
-<a class="btn btn-secondary" href="{% url 'login_user' %}">Войти</a>
-<a class="btn btn-secondary" href="{% url 'register_user' %}">Регистрация</a>
-<hr>
-{% endif %}
+    {% else %}
+    <a class="btn btn-secondary" href="{% url 'login_user' %}">Войти</a>
+    <a class="btn btn-secondary" href="{% url 'register_user' %}">Регистрация</a>
+    <hr>
+    {% endif %}
+</div>
 {% block content %}
 {% endblock %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"

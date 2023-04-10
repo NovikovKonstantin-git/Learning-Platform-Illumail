@@ -6,6 +6,7 @@ from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView
 from .forms import RegisterUser, UpdateProfileForm, NewPasswordForm
 from .models import CustomUser
 
+
 class RegisterNewUser(CreateView):
     form_class = RegisterUser
     template_name = 'register.html'

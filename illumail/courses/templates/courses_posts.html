@@ -2,12 +2,15 @@
 
 {% block content %}
 <div class="container">
+    {% if request.user.is_authenticated %}
+    <a class="btn btn-outline-secondary">Вступить</a>
+    {% endif %}
+
     {% if request.user == course.author %}
     <a class="btn btn-secondary" href="{% url 'update_course' course.id %}">Изменить курс</a>
     <a class="btn btn-secondary" href="{% url 'delete_course' course.id %}">Удалить курс</a>
     {% endif %}
     <br><br>
-
     <h5>О курсе: {{ course.about_the_course|linebreaks }}</h5>
 
 

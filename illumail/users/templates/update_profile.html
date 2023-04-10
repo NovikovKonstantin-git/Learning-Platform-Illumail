@@ -5,9 +5,11 @@
 <form method="post" enctype="multipart/form-data" autocomplete="off">
     <div class="container">
         {% csrf_token %}
+        <h4>Общая информация:</h4>
+        {% if user.photo %}
         Фото на данный момент: <br>
-        <img src="{{ user.photo.url }}" alt="" width="200"> <br>
-
+        <img src="{{ user.photo.url }}" alt="" width="200" style="border-radius: 10%;"> <br>
+        {% endif %}
         <div class="row">
             <label>Новое фото профиля:</label>
             <input type="file" id="id_photo" name="photo"/>
@@ -24,8 +26,9 @@
         Имя пользователя: {{ form.username }} <br>
         Эл.почта: {{ form.email }} <br>
         О себе: {{ form.bio }} <br>
-        Пароль: {{ form.password }} <br>
-        <br>
+        <hr><h4>Конфеденциальность:</h4>
+        <a class="btn btn-secondary" href="{% url 'new_password' user.id %}">Изменить пароль</a>
+        <hr>
         <button class="btn btn-secondary">Сохранить</button>
         <br><br><br>
     </div>
