@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container">
-    <h3 align="center">Все курсы</h3>
+    <h3 align="center">{{ subtitle }}</h3>
     {% for c in courses %}
     <div class="card" style="width: 21rem; display: inline-block; margin-right: 30px; margin-bottom: 30px;">
         <div class="card-header">
@@ -19,5 +19,11 @@
         </div>
     </div>
     {% endfor %}
+    <hr>
+    <h3>Категории:</h3>
+    {% for cats in categories %}
+    <a class="btn btn-secondary" href="{{ cats.get_absolute_url }}">{{ cats.title }}</a>
+    {% endfor %}
+    <br><br>
 </div>
 {% endblock %}

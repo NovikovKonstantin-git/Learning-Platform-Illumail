@@ -10,4 +10,6 @@ urlpatterns = [
     path('courses/<int:pk>/delete/', delete_course, name='delete_course'),
     path('courses/search/', SearchCourse.as_view(), name='search_course'),
     path('courses/teaching/', Teaching.as_view(), name='teaching'),
+    path('courses/category/<int:category_id>/', category_courses, name='category_courses'),
+    # path('courses/category/<int:pk>/', CategoriesCourses.as_view(), name='categories_course'),
 ]

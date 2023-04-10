@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
-from .models import Courses, Posts, CompletedTaskModel
+from .models import Courses, Posts, CompletedTaskModel, Category
 from .forms import ComplitedTaskForm, CreateOrUpdateCourseForm
 from django.views.generic import ListView, DeleteView, UpdateView, DetailView, CreateView
 
@@ -10,7 +10,12 @@ class ShowCourses(ListView):
     model = Courses
     template_name = 'courses.html'
     context_object_name = 'courses'
-    extra_context = {'title': 'Курсы'}
+    extra_context = {'title': 'Курсы', 'subtitle': 'Все курсы'}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
 
 
 def show_posts(request, course_id):
@@ -81,7 +86,7 @@ class SearchCourse(ListView):
     model = Courses
     template_name = 'courses.html'
     context_object_name = 'courses'
-    extra_context = {'title': 'Поиск курсов'}
+    extra_context = {'title': 'Поиск курсов', 'subtitle': 'По Вашему запросу найдено:'}
 
     def get_queryset(self):
         return Courses.objects.filter(title__icontains=self.request.GET.get('search', ''))
@@ -92,3 +97,10 @@ class Teaching(ListView):
     template_name = 'teaching.html'
     context_object_name = 'courses'
     extra_context = {'title': 'Преподавание'}
+
+
+def category_courses(request, category_id):
+    category = Category.objects.get(id=category_id) # для получения тайтла, чтобы перредать в сабтайтл
+    courses = Courses.objects.filter(category_id=category_id)
+    categories = Category.objects.all()  # для вывода категорий, не только на главной странице, но и в категориях курсов
+    return render(request, 'courses.html', {'courses': courses, 'subtitle': category.title, 'categories': categories})
