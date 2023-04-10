@@ -5,7 +5,7 @@ from .serializers import CoursesSerializer, UserSerializer, CreateUserSerializer
 from courses.models import Courses
 from users.models import CustomUser
 from rest_framework import viewsets
-from .permissions import IsAuthorOrReadOnly
+from .permissions import IsAuthorOrReadOnly, IsMyProfile
 
 
 class CoursesViewSet(viewsets.ModelViewSet):
@@ -20,7 +20,7 @@ class MyProfileAPI(generics.RetrieveUpdateDestroyAPIView):
         # return CustomUser.objects.filter(pk=self.request.user.id)
 
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticated, IsMyProfile]
 
 
 class UserAPICreate(generics.CreateAPIView):

@@ -11,3 +11,11 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
             return True
 
 
+class IsMyProfile(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        elif obj.username == request.user.username:
+            return True
+        elif request.user.is_staff:
+            return True

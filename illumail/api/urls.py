@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views import *
 from rest_framework import routers
 
@@ -9,6 +9,8 @@ urlpatterns = [
 
     path('api/users/<int:pk>/my_profile/', MyProfileAPI.as_view()),
     path('api/users/create/', UserAPICreate.as_view()),
+
+    path('api/auth/', include('rest_framework.urls')),
 ]
 
 
