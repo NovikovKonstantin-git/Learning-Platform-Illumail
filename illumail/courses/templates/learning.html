@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h3 align="center">{{ subtitle }}</h3>
+    {% for u_c in user_courses %}
+    <div class="card" style="width: 21rem; display: inline-block; margin-right: 30px; margin-bottom: 30px;">
+        <div class="card-header">
+            <h3 align="center">{{ u_c.title }}</h3>
+        </div>
+        {% if u_c.course_photo %}
+        <img src="{{ u_c.course_photo.url }}" class="card-img-top" alt="" height="175"> <br>
+        {% endif %}
+        Дата создания: {{ u_c.time_created }} <br>
+        Дата изменения: {{ u_c.time_updated }} <br>
+        Автор: {{ u_c.author }} ({{ u_c.author.first_name }}) <br>
+        <div class="d-grid gap-2">
+            <a class="btn btn-secondary" href="{{ u_c.get_absolute_url }}">Продолжить обучение</a>
+            <a class="btn btn-outline-secondary" href="{% url 'leave_the_course' u_c.pk %}">Покинуть курс</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -11,5 +11,8 @@ urlpatterns = [
     path('courses/search/', SearchCourse.as_view(), name='search_course'),
     path('courses/teaching/', Teaching.as_view(), name='teaching'),
     path('courses/category/<int:category_id>/', category_courses, name='category_courses'),
+    path('learning/', learning, name='learning'),
+    path('leave_the_course/<int:pk>/', leave_the_course, name='leave_the_course'),
+    path('join_the_course/<int:pk>/', join_the_course, name='join_the_course'),
     # path('courses/category/<int:pk>/', CategoriesCourses.as_view(), name='categories_course'),
 ]

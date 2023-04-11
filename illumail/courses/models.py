@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator
 from django.db import models
 from django.urls import reverse
 from users.models import CustomUser
@@ -9,7 +10,7 @@ class Courses(models.Model):
     about_the_course = models.TextField(verbose_name='О курсе')
     time_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     time_updated = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
-    author = models.ForeignKey(CustomUser, on_delete=models.PROTECT, verbose_name='Автор курса')
+    author = models.ForeignKey(CustomUser, on_delete=models.PROTECT, verbose_name='Автор курса', related_name='course')
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категория')
 
     def get_absolute_url(self):

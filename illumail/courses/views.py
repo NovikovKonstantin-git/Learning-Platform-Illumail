@@ -1,6 +1,8 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
+
+from users.models import CustomUser
 from .models import Courses, Posts, CompletedTaskModel, Category
 from .forms import ComplitedTaskForm, CreateOrUpdateCourseForm
 from django.views.generic import ListView, DeleteView, UpdateView, DetailView, CreateView
@@ -104,3 +106,21 @@ def category_courses(request, category_id):
     courses = Courses.objects.filter(category_id=category_id)
     categories = Category.objects.all()  # для вывода категорий, не только на главной странице, но и в категориях курсов
     return render(request, 'courses.html', {'courses': courses, 'subtitle': category.title, 'categories': categories})
+
+
+def learning(request):
+    user_courses = CustomUser.objects.get(id=request.user.id).user_courses.all()
+    return render(request, 'learning.html', {'user_courses': user_courses})
+
+
+def leave_the_course(request, pk):
+    user = request.user
+    Courses.objects.get(id=pk).customuser_set.remove(user)
+    return HttpResponseRedirect(reverse('learning'))
+
+
+def join_the_course(request, pk):
+    user = request.user
+    Courses.objects.get(id=pk).customuser_set.add(user)
+    return HttpResponseRedirect(reverse('learning'))
+
