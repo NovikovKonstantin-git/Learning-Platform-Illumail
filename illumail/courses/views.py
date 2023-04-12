@@ -5,7 +5,7 @@ from courses.templatetags import news_tags
 from users.models import CustomUser
 from .models import Courses, Posts, CompletedTaskModel, Category
 from .forms import ComplitedTaskForm, CreateOrUpdateCourseForm
-from django.views.generic import ListView, DeleteView, UpdateView, DetailView, CreateView
+from django.views.generic import ListView, DeleteView, UpdateView, DetailView, CreateView, TemplateView
 
 
 class ShowCourses(ListView):
@@ -154,10 +154,11 @@ def leave_the_course(request, pk):
     return HttpResponseRedirect(reverse('learning'))
 
 
-def show_news(request):
-    context = {
-        'title': 'Новости',
-        'subtitle': 'Актуальные новости в сфере образования:',
-        'news': news_tags.itog,
-    }
-    return render(request, 'news.html', context)
+class ShowNews(TemplateView):
+    template_name = 'news.html'
+    extra_context = {'title': 'Новости', 'subtitle': 'Актуальные новости в сфере образования:'}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['news'] = news_tags.itog
+        return context
