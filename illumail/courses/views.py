@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
-
+from courses.templatetags import news_tags
 from users.models import CustomUser
 from .models import Courses, Posts, CompletedTaskModel, Category
 from .forms import ComplitedTaskForm, CreateOrUpdateCourseForm
@@ -20,10 +20,37 @@ class ShowCourses(ListView):
         return context
 
 
-def show_posts(request, course_id):
-    course = Courses.objects.get(id=course_id)
-    posts = Posts.objects.filter(course_id=course_id)
-    return render(request, 'courses_posts.html', {'posts': posts, 'course': course})
+class ShowPosts(ListView):
+    model = Posts
+    template_name = 'courses_posts.html'
+    extra_context = {'title': 'Информция'}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['course'] = Courses.objects.get(id=self.kwargs['course_id'])
+        context['posts'] = Posts.objects.filter(course_id=self.kwargs['course_id'])
+        return context
+
+
+# class ShowThePostAndCompletedTasks(UpdateView):
+#     model = Posts
+#     pk_url_kwarg = 'post_id'
+#     form_class = ComplitedTaskForm
+#     template_name = 'specific_post.html'
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['posts_in_course'] = Posts.objects.filter(course_id=self.kwargs['course_id'])
+#         context['post'] = Posts.objects.filter(id=self.kwargs['post_id'])
+#
+#     def form_valid(self, form):
+#         files = self.request.FILES.getlist('file')
+#         for f in files:
+#             file_instance = CompletedTaskModel(file=f)
+#             file_instance.user = self.request.user
+#             file_instance.post = self.request.post[0]
+#             file_instance.save()
+#         return redirect('show_courses')
 
 
 def show_specific_post(request, course_id, post_id):
@@ -108,19 +135,29 @@ def category_courses(request, category_id):
     return render(request, 'courses.html', {'courses': courses, 'subtitle': category.title, 'categories': categories})
 
 
-def learning(request):
-    user_courses = CustomUser.objects.get(id=request.user.id).user_courses.all()
-    return render(request, 'learning.html', {'user_courses': user_courses})
+class Learning(ListView):
+    template_name = 'learning.html'
+    extra_context = {'title': 'Обучение', 'subtitle': 'Изучаемые курсы:'}
+    context_object_name = 'user_courses'
 
-
-def leave_the_course(request, pk):
-    user = request.user
-    Courses.objects.get(id=pk).customuser_set.remove(user)
-    return HttpResponseRedirect(reverse('learning'))
+    def get_queryset(self):
+        return CustomUser.objects.get(id=self.request.user.id).user_courses.all()
 
 
 def join_the_course(request, pk):
-    user = request.user
-    Courses.objects.get(id=pk).customuser_set.add(user)
+    Courses.objects.get(id=pk).customuser_set.add(request.user)
     return HttpResponseRedirect(reverse('learning'))
 
+
+def leave_the_course(request, pk):
+    Courses.objects.get(id=pk).customuser_set.remove(request.user)
+    return HttpResponseRedirect(reverse('learning'))
+
+
+def show_news(request):
+    context = {
+        'title': 'Новости',
+        'subtitle': 'Актуальные новости в сфере образования:',
+        'news': news_tags.itog,
+    }
+    return render(request, 'news.html', context)
