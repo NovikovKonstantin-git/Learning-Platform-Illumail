@@ -6,13 +6,14 @@ register = template.Library()
 url = 'https://sputnik.by/education/'
 page = requests.get(url)
 
-titles_list, dates_list, urls_list = [], [], []
+titles_list, dates_list, urls_list, image_list = [], [], [], []
 
 soup = BeautifulSoup(page.text, 'lxml')
 
 titles = soup.find_all('div', {'class': 'list__content'})
 dates = soup.find_all('span', {'class': 'date'})
 urls = soup.find_all('div', {'class': 'list__content'})
+images = soup.find_all('div', {'class': 'list__image'})
 
 for url in urls:
     href = url.find('a', {'class': 'list__title'}).get('href')
@@ -27,9 +28,13 @@ for datochka in dates:
     result_date = datochka.text
     dates_list.append(result_date)
 
+for image in images:
+    path = image.find('img', {'class': 'responsive_img m-list-img'}).get('src')
+    image_list.append(path)
+
 itog = []
 for i in range(len(titles_list)):
-    itog.append(f"{titles_list[i]} <br> {dates_list[i]} <br> <a class='btn btn-secondary' href='{urls_list[i]}'>Посмотреть статью</a> <br> ")
+    itog.append(f"{titles_list[i]} <br> <img src='{image_list[i]}' height='250'> <br>{dates_list[i]} <br> <a class='btn btn-secondary' href='{urls_list[i]}'>Посмотреть статью</a> <br> ")
 
 
 @register.simple_tag()

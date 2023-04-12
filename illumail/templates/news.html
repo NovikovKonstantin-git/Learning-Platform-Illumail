@@ -2,11 +2,15 @@
 
 {% block content %}
 <div class="container">
-    <h4 align="center">{{ subtitle }}</h4>
+    <h4 align="center">{{ subtitle }}*</h4>
+    <br>
     {% autoescape off %}
     {% for item in news %}
-    {{ item }} <br>
+    <h5>{{ item }}</h5>
+    <hr>
     {% endfor %}
     {% endautoescape %}
+    *Информация взята с сайта sputnik.by
+    <br><br><br><br>
 </div>
 {% endblock %}
