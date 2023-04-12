@@ -9,7 +9,10 @@ class CustomUser(AbstractUser):
     patronymic = models.CharField(max_length=300, verbose_name='Отчество')
     time_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата регистрации')
     time_updated = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
-    # courses = models.ManyToManyField(Courses, verbose_name='Курсы')
+    user_courses = models.ManyToManyField('courses.Courses', verbose_name='Курсы')
+
+    def users_courses(self):
+        return [c.title for c in self.user_courses.all()]
 
     def get_absolute_url(self):
         return reverse('my_profile', kwargs={'id': self.id})
@@ -20,3 +23,4 @@ class CustomUser(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+
