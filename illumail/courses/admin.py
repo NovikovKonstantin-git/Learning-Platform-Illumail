@@ -9,7 +9,7 @@ class CoursesAdmin(admin.ModelAdmin):
 
 
 class PostsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'course', 'time_created', 'time_updated')
+    list_display = ('title', 'course', 'post_type', 'time_created', 'time_updated')
     list_filter = ('title', 'time_created')
     search_fields = ('title',)
 

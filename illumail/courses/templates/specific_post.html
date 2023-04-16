@@ -1,8 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row" xmlns="http://www.w3.org/1999/html">
-    <div class="col-sm-6 mb-3 mb-sm-0 px-sm-5 mt-3">
+<div class="container">
+
+    {% for p in post %}
+        {% if request.user == p.course.author %}
+            <a class="btn btn-secondary" href="{% url 'delete_post' p.course.id p.id %}">Удалить задание</a><br><br>
+        {% endif %}
+    {% endfor %}
+
+    <div class="row">
         {% for p in post %}
         <div class="card" style="width: 35rem; display: inline-block;">
             <h3 class="card-header" align="center">{{ p.title }}</h3>
@@ -22,26 +29,27 @@
             Дата создания: {{ p.time_created }} <br>
             Дата изменения: {{ p.time_updated }} <br>
         </div>
-    </div>
-    {% endfor %}
 
-    {% if user.is_authenticated %}
-    <br> <br>
-    <div class="col-sm-4 mt-3 px-sm-5">
-        <div class="card">
-            <h4 class="card-header">Выполненные задания</h4>
-            <div class="card-body">
-                <h5 class="card-title">Прикрепите сюда выполненные здания</h5>
-                <form method="post" enctype="multipart/form-data" autocomplete="off">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-secondary">Сдать</button>
-                    </div>
-                </form>
+        {% endfor %}
+
+        {% if user.is_authenticated %}
+        <br> <br>
+        <div class="col-sm-5 px-sm-5">
+            <div class="card">
+                <h4 class="card-header">Выполненные задания</h4>
+                <div class="card-body">
+                    <h5 class="card-title">Прикрепите сюда выполненные здания</h5>
+                    <form method="post" enctype="multipart/form-data" autocomplete="off">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-secondary">Сдать</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
+        {% endif %}
     </div>
-    {% endif %}
 </div>
 {% endblock %}

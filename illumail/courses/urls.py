@@ -15,5 +15,6 @@ urlpatterns = [
     path('leave_the_course/<int:pk>/', leave_the_course, name='leave_the_course'),
     path('join_the_course/<int:pk>/', join_the_course, name='join_the_course'),
     path('news/', ShowNews.as_view(), name='show_news'),
-    # path('courses/category/<int:pk>/', CategoriesCourses.as_view(), name='categories_course'),
+    path('courses/<int:course_id>/posts/create/', CreatePost.as_view(), name='create_post'),
+    path('courses/<int:pk>/posts/<int:post_id>/delete/', delete_post, name='delete_post'),
 ]

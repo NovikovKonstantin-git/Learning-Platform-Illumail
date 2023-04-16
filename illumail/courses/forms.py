@@ -1,5 +1,5 @@
 from django import forms
-from .models import CompletedTaskModel, Courses
+from .models import CompletedTaskModel, Courses, Posts
 
 
 class ComplitedTaskForm(forms.ModelForm):
@@ -16,3 +16,12 @@ class CreateOrUpdateCourseForm(forms.ModelForm):
     class Meta:
         model = Courses
         fields = ['title', 'course_photo', 'about_the_course']
+
+
+class CreateOrUpdatePostForm(forms.ModelForm):
+    post_type = forms.ChoiceField(choices=Posts.CHOICES, widget=forms.RadioSelect(), required=True, label='Тип задания')
+
+    class Meta:
+        model = Posts
+        fields = ['title', 'photo', 'file', 'post_text', 'post_type']
+

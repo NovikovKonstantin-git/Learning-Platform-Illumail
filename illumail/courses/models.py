@@ -40,6 +40,10 @@ class Category(models.Model):
 
 
 class Posts(models.Model):
+    CHOICES = [
+        ('1', 'Лекция'),
+        ('2', 'Практика'),
+    ]
     title = models.CharField(max_length=300, verbose_name='Название')
     photo = models.ImageField(upload_to='posts_images/%Y/%m/%d', blank=True, verbose_name='Изображение')
     file = models.FileField(upload_to='files/%Y/%m/%d', blank=True, verbose_name='Файл')
@@ -47,6 +51,7 @@ class Posts(models.Model):
     course = models.ForeignKey(Courses, on_delete=models.CASCADE, verbose_name='Курс')
     time_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     time_updated = models.DateTimeField(auto_now=True, verbose_name='Дата изменеия')
+    post_type = models.CharField(max_length=200, choices=CHOICES, verbose_name='Тип поста')
 
     def get_absolute_url(self):
         return reverse('show_specific_post', kwargs={'course_id': self.course.id, 'post_id': self.id})

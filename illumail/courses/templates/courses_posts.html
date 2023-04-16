@@ -9,6 +9,7 @@
     {% if request.user == course.author %}
     <a class="btn btn-secondary" href="{% url 'update_course' course.id %}">Изменить курс</a>
     <a class="btn btn-secondary" href="{% url 'delete_course' course.id %}">Удалить курс</a>
+    <a class="btn btn-secondary" href="{% url 'create_post' course.id %}">Добавить задание</a>
     {% endif %}
     <br><br>
     <h5>О курсе: {{ course.about_the_course|linebreaks }}</h5>

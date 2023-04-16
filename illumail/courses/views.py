@@ -4,7 +4,7 @@ from django.urls import reverse, reverse_lazy
 from courses.templatetags import news_tags
 from users.models import CustomUser
 from .models import Courses, Posts, CompletedTaskModel, Category
-from .forms import ComplitedTaskForm, CreateOrUpdateCourseForm
+from .forms import ComplitedTaskForm, CreateOrUpdateCourseForm, CreateOrUpdatePostForm
 from django.views.generic import ListView, DeleteView, UpdateView, DetailView, CreateView, TemplateView
 
 
@@ -162,3 +162,23 @@ class ShowNews(TemplateView):
         context = super().get_context_data(**kwargs)
         context['news'] = news_tags.itog
         return context
+
+
+class CreatePost(CreateView):
+    form_class = CreateOrUpdatePostForm
+    template_name = 'create_task.html'
+    extra_context = {'title': 'Создание задания'}
+
+    def form_valid(self, form):
+        fs = form.save(commit=False)
+        fs.course_id = self.kwargs['course_id']
+        fs.save()
+        return redirect('teaching')
+
+
+def delete_post(request, pk, post_id):
+    course = Courses.objects.get(id=pk)
+    post = Posts.objects.get(id=post_id)
+    post.delete()
+    return HttpResponseRedirect(reverse('teaching'))
+
