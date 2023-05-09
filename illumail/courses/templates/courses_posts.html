@@ -2,7 +2,14 @@
 
 {% block content %}
 <div class="container">
-    {% if request.user.is_authenticated %}
+<!--    {% for c in request.user.user_courses.all %}-->
+<!--    {{ c }}-->
+<!--    {% endfor %}-->
+    {% for u in allusers %}
+    {{ u }}
+    {% endfor %}
+
+    {% if request.user not in request.user.user_courses.all %}
     <a class="btn btn-secondary" href="{% url 'join_the_course' course.id %}">Вступить</a>
     {% endif %}
 

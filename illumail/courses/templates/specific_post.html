@@ -2,36 +2,31 @@
 
 {% block content %}
 <div class="container">
-
-    {% for p in post %}
-        {% if request.user == p.course.author %}
-            <a class="btn btn-secondary" href="{% url 'delete_post' p.course.id p.id %}">Удалить задание</a><br><br>
+        {% if request.user == post.course.author %}
+            <a class="btn btn-secondary" href="{% url 'delete_post' post.course.id post.id %}">Удалить задание</a><br><br>
         {% endif %}
-    {% endfor %}
 
     <div class="row">
-        {% for p in post %}
         <div class="card" style="width: 35rem; display: inline-block;">
-            <h3 class="card-header" align="center">{{ p.title }}</h3>
-            Курс: {{ p.course }} <br>
-            {% if p.photo %}
-            <img src="{{ p.photo.url }}" alt="" class="card-img-top" height="220"> <br>
+            <h3 class="card-header" align="center">{{ post.title }}</h3>
+            Курс: {{ post.course }} <br>
+            {% if post.photo %}
+            <img src="{{ post.photo.url }}" alt="" class="card-img-top" height="220"> <br>
             {% endif %}
 
-            {% if p.file %}
-            {{ p.file }} <br>
+            {% if post.file %}
+            {{ post.file }} <br>
             {% endif %}
 
-            {% if p.post_text %}
-            {{ p.post_text }} <br>
+            {% if post.post_text %}
+            {{ post.post_text }} <br>
             {% endif %}
 
-            Дата создания: {{ p.time_created }} <br>
-            Дата изменения: {{ p.time_updated }} <br>
+            Дата создания: {{ post.time_created }} <br>
+            Дата изменения: {{ post.time_updated }} <br>
         </div>
 
-        {% endfor %}
-
+        {% if post.post_type == "2" %}
         {% if user.is_authenticated %}
         <br> <br>
         <div class="col-sm-5 px-sm-5">
@@ -49,6 +44,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         {% endif %}
     </div>
 </div>

@@ -34,7 +34,7 @@ for image in images:
 
 itog = []
 for i in range(len(titles_list)):
-    itog.append(f"{titles_list[i]} <br> <img src='{image_list[i]}' height='250'> <br>{dates_list[i]} <br> <a class='btn btn-secondary' href='{urls_list[i]}'>Посмотреть статью</a> <br> ")
+    itog.append(f"{titles_list[i]} <br> <img src='{image_list[i]}' height='250'> <br> <br> <a class='btn btn-secondary' href='{urls_list[i]}'>Посмотреть статью</a> <br> ")
 
 
 @register.simple_tag()
