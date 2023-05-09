@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    {% if another_user.photo %}
+    <img src="{{ another_user.photo.url }}" alt="" width="200" style="border-radius: 10%;">
+    {% endif %}
+
+    <h6>Имя: {{ another_user.first_name }}</h6>
+    <h6>Фамилия: {{ another_user.last_name }}</h6>
+    <h6>Отчество: {{ another_user.patronymic }}</h6>
+    <h6>Имя пользователя: {{ another_user.username }}</h6>
+    <h6>Эл.почта: {{ another_user.email }}</h6>
+    <h6>О себе: {{ another_user.bio }}</h6>
+    <h6>Дата регистрации: {{ another_user.time_created }}</h6>
+    <h6>Дата измененения: {{ another_user.time_updated }}</h6>
+</div>
+{% endblock %}

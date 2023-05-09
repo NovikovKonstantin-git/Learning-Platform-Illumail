@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
@@ -9,7 +10,8 @@ class CustomUser(AbstractUser):
     patronymic = models.CharField(max_length=300, verbose_name='Отчество')
     time_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата регистрации')
     time_updated = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
-    user_courses = models.ManyToManyField('courses.Courses', verbose_name='Курсы')
+    user_courses = models.ManyToManyField('courses.Courses', blank=True, verbose_name='Курсы')
+    subscriptions = models.ManyToManyField("CustomUser", blank=True, verbose_name='Подписки')
 
     def users_courses(self):
         return [c.title for c in self.user_courses.all()]

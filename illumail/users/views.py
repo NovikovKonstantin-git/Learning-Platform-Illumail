@@ -1,7 +1,7 @@
 from django.contrib.auth import login
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import DetailView, CreateView, UpdateView
+from django.views.generic import DetailView, CreateView, UpdateView, ListView
 from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView
 from .forms import RegisterUser, UpdateProfileForm, NewPasswordForm
 from .models import CustomUser
@@ -53,6 +53,25 @@ class NewPassword(PasswordChangeView):
     success_url = reverse_lazy('show_courses')
     extra_context = {'title': 'Смена пароля'}
 
+
+class MySubscriptions(ListView):
+    template_name = 'subscriptions.html'
+    extra_context = {'title': 'Подписки', 'subtitle': 'Вы подписаны на:'}
+    context_object_name = 'subscriptions'
+
+    def get_queryset(self):
+        return CustomUser.objects.get(id=self.request.user.id).subscriptions.all()
+
+
+class AnotherUser(DetailView):
+    model = CustomUser
+    template_name = 'another_user.html'
+    extra_context = {'title': 'Пользователь'}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['another_user'] = CustomUser.objects.get(pk=self.kwargs['pk'])
+        return context
 
 
 

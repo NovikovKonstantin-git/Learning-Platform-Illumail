@@ -29,6 +29,9 @@ class ShowPosts(ListView):
         context = super().get_context_data(**kwargs)
         context['course'] = Courses.objects.get(id=self.kwargs['course_id'])
         context['posts'] = Posts.objects.filter(course_id=self.kwargs['course_id'])
+
+        # список курсов у пользователя, чтобы потом исчезала кнопка "Вступить"
+        context['user_courses'] = CustomUser.objects.get(username=self.request.user).user_courses.all()
         return context
 
 
@@ -55,7 +58,7 @@ class ShowPosts(ListView):
 
 def show_specific_post(request, course_id, post_id):
     posts_in_course = Posts.objects.filter(course_id=course_id)
-    post = Posts.objects.filter(id=post_id)
+    post = Posts.objects.get(id=post_id)
 
     if request.method == "POST":
         form = ComplitedTaskForm(request.POST, request.FILES)

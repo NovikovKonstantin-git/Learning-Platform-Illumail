@@ -15,9 +15,9 @@
     <h6>О себе: {{ user.bio }}</h6>
     <h6>Дата регистрации: {{ user.time_created }}</h6>
     <h6>Дата измененения: {{ user.time_updated }}</h6>
-
     <a class="btn btn-secondary" href="{% url 'update_profile' user.id %}">Изменить</a>
     <a class="btn btn-secondary" href="{% url 'logout_user' %}">Выйти из аккаунта</a>
+    <a class="btn btn-secondary" href="{% url 'my_subscriptions' user.id %}">Подписки</a>
     <br><br><br>
 </div>
 {% endblock %}

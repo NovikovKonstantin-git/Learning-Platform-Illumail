@@ -10,4 +10,6 @@ urlpatterns = [
     path('my_profile/<int:id>/', MyProfile.as_view(), name='my_profile'),
     path('my_profile/<int:id>/edit/', UpdateProfile.as_view(), name='update_profile'),
     path('my_profile/<int:pk>/edit/password/', NewPassword.as_view(), name='new_password'),
+    path('my_profile/<int:pk>/subscriptions/', MySubscriptions.as_view(), name='my_subscriptions'),
+    path('user/<int:pk>/', AnotherUser.as_view(), name='another_user'),
 ]
