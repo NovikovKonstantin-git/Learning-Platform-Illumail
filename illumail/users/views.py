@@ -1,6 +1,7 @@
 from django.contrib.auth import login
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, CreateView, UpdateView, ListView
 from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView
 from .forms import RegisterUser, UpdateProfileForm, NewPasswordForm
@@ -37,6 +38,11 @@ class MyProfile(DetailView):
     def get_object(self, queryset=None):
         return self.request.user
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cnt_sbs'] = len(CustomUser.objects.get(id=self.request.user.id).subscriptions.all())
+        return context
+
 
 class UpdateProfile(UpdateView):
     form_class = UpdateProfileForm
@@ -71,8 +77,31 @@ class AnotherUser(DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['another_user'] = CustomUser.objects.get(pk=self.kwargs['pk'])
+
+        # чтобы появлялась кнопка подписаться/отписаться
+        context['is_followed'] = False
+        if CustomUser.objects.get(pk=self.kwargs['pk']) in CustomUser.objects.get(id=self.request.user.id).subscriptions.all():
+            context['is_followed'] = True
+        else:
+            context['is_followed'] = False
         return context
 
 
+def add_subscription(request, pk):
+    CustomUser.objects.get(id=request.user.id).subscriptions.add(CustomUser.objects.get(id=pk))
+    return HttpResponseRedirect(reverse('my_subscriptions', args=[request.user.id]))
 
 
+def unsubscribe(request, pk):
+    CustomUser.objects.get(id=request.user.id).subscriptions.remove(CustomUser.objects.get(id=pk))
+    return HttpResponseRedirect(reverse('my_subscriptions', args=[request.user.id]))
+
+
+class SearchUsers(ListView):
+    model = CustomUser
+    template_name = 'search_users.html'
+    context_object_name = 'users'
+    extra_context = {'title': 'Поиск пользователей', 'subtitle': 'По Вашему запросу найдено:'}
+
+    def get_queryset(self):
+        return CustomUser.objects.filter(username__icontains=self.request.GET.get('search', ''))

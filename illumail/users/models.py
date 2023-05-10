@@ -16,6 +16,9 @@ class CustomUser(AbstractUser):
     def users_courses(self):
         return [c.title for c in self.user_courses.all()]
 
+    # def users_subscriptions(self):
+    #     return [s.username for s in self.subscriptions.all()]
+
     def get_absolute_url(self):
         return reverse('my_profile', kwargs={'id': self.id})
 

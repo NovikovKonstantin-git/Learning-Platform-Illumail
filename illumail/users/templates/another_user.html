@@ -14,5 +14,15 @@
     <h6>О себе: {{ another_user.bio }}</h6>
     <h6>Дата регистрации: {{ another_user.time_created }}</h6>
     <h6>Дата измененения: {{ another_user.time_updated }}</h6>
+
+    {% if is_followed %}
+    <a class="btn btn-secondary" href="{% url 'unsubscribe' another_user.pk %}">Отписаться</a>
+    {% else %}
+    <a class="btn btn-secondary" href="{% url 'add_subscription' another_user.pk %}">Подписаться</a>
+    {% endif %}
+
+
+
+
 </div>
 {% endblock %}

@@ -2,6 +2,13 @@
 
 {% block content %}
 <div class="container">
+
+    <form action="{% url 'search_users' %}" method="get" class="form-inline">
+        <input autocomplete="off" type="search" placeholder="Поиск пользователей"
+               aria-label="Search" name="search" width="">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Искать</button>
+    </form>
+
     <h3 align="center">{{ subtitle }}</h3>
     {% for s in subscriptions %}
     <div class="card" style="width: 11rem; height 30rem; display: inline-block; margin-right: 43px; margin-bottom: 30px;">

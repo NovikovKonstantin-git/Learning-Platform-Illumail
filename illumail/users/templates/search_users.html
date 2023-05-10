@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h3 align="center">{{ subtitle }}</h3>
+    {% for u in users %}
+    <div class="card"
+         style="width: 11rem; height 30rem; display: inline-block; margin-right: 43px; margin-bottom: 30px;">
+        <div class="card-header">
+            <h5 align="center">{{ u.username }}</h5>
+            <hr>
+            <h6 align="center">{{ u.last_name }}<br>{{ u.first_name }} <br>{{ u.patronymic }}</h6>
+        </div>
+        {% if u.photo %}
+        <img src="{{ u.photo.url }}" class="card-img-top" alt="" height="175"><br>
+        {% endif %}
+        <div class="d-grid gap-2">
+            <a class="btn btn-secondary" href="{% url 'another_user' u.pk %}">Подробнее</a>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}
