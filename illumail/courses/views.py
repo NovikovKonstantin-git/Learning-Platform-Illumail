@@ -67,7 +67,7 @@ def show_specific_post(request, course_id, post_id):
             for f in files:
                 file_instance = CompletedTaskModel(file=f)
                 file_instance.user = request.user
-                file_instance.post = post[0]
+                file_instance.post = post
                 file_instance.save()
             return redirect('show_courses')
     else:
