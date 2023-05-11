@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Courses, Posts, CompletedTaskModel, Category
+from .models import Courses, Posts, CompletedTaskModel, Category, Comments
 
 
 class CoursesAdmin(admin.ModelAdmin):
@@ -29,3 +29,4 @@ admin.site.register(Courses, CoursesAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Posts, PostsAdmin)
 admin.site.register(CompletedTaskModel, ComplitedTaskModelAdmin)
+admin.site.register(Comments)

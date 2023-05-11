@@ -4,15 +4,15 @@
 <div class="container">
     {% if request.user.is_authenticated %}
         {% if is_followed %}
-        <a class="btn btn-secondary" href="{% url 'leave_the_course' course.id %}">Покинуть</a>
+            <a class="btn btn-secondary" href="{% url 'leave_the_course' course.id %}">Покинуть</a>
         {% elif request.user == course.author %}
 
         {% else %}
-        <a class="btn btn-secondary" href="{% url 'join_the_course' course.id %}">Вступить</a>
+            <a class="btn btn-secondary" href="{% url 'join_the_course' course.id %}">Вступить</a>
         {% endif %}
     {% else %}
-        <h5>Авторизуйтесь, чтобы вступить</h5>
-{% endif %}
+        <h5><i>Авторизуйтесь, чтобы вступить</i></h5>
+    {% endif %}
 
     {% if request.user == course.author %}
     <a class="btn btn-secondary" href="{% url 'update_course' course.id %}">Изменить курс</a>
@@ -25,13 +25,38 @@
 
     {% for p in posts %}
     <div class="card">
+        <div class="card-body">
         <h3>{{ p.title }}</h3>
-        Дата создания: {{ p.time_created }} |
-        Дата изменения: {{ p.time_updated }} <br> <br>
+        <h6>Дата создания: {{ p.time_created }} |
+        Дата изменения: {{ p.time_updated }}</h6>
+        </div>
         <a class="btn btn-secondary" href="{{ p.get_absolute_url }}">Подробнее</a>
     </div>
     <br>
     {% endfor %}
 
+    <hr>
+    <h3 align="center">Комментарии: {{ count_comments }}</h3>
+
+    <form method="post" autocomplete="off">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-secondary">Добавить</button>
+    </form>
+    <br>
+
+    {% for c in comments %}
+    <div class="card">
+        <div class="card-body">
+            <h5>
+                <img src="{{ c.author.photo.url }}" alt="" width="40" height="40">
+                <a class="btn btn-outline-secondary" href="{% url 'another_user' c.author.pk %}">{{ c.author }}</a>
+            </h5>
+            <h5>{{ c.comment_text }}</h5>
+            <h5>{{ c.time_created }}</h5>
+        </div>
+    </div>
+    <br>
+    {% endfor %}<br><br>
 </div>
 {% endblock %}

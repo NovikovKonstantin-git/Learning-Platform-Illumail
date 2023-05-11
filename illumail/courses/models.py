@@ -78,3 +78,18 @@ class CompletedTaskModel(models.Model):
         verbose_name = 'Выполненное задание'
         verbose_name_plural = 'Выполненные задания'
         ordering = ['-time_load', ]
+
+
+class Comments(models.Model):
+    comment_text = models.CharField(max_length=300, verbose_name='Текст комментария')
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Автор комментария')
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE, verbose_name='Курс с комментарием')
+    time_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата комментария')
+
+    def __str__(self):
+        return f"{self.author}-{self.course}-{self.comment_text}"
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+        ordering = ['-time_created']

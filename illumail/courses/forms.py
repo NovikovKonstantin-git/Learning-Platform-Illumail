@@ -1,5 +1,5 @@
 from django import forms
-from .models import CompletedTaskModel, Courses, Posts
+from .models import CompletedTaskModel, Courses, Posts, Comments
 
 
 class ComplitedTaskForm(forms.ModelForm):
@@ -25,3 +25,11 @@ class CreateOrUpdatePostForm(forms.ModelForm):
         model = Posts
         fields = ['title', 'photo', 'file', 'post_text', 'post_type']
 
+
+class CommentForm(forms.ModelForm):
+    comment_text = forms.CharField(label='Текст комментария', required=True, widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = Comments
+        fields = ['comment_text', ]
