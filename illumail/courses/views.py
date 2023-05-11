@@ -1,10 +1,12 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
+from django.views.generic.edit import FormMixin
+
 from courses.templatetags import news_tags
 from users.models import CustomUser
-from .models import Courses, Posts, CompletedTaskModel, Category
-from .forms import ComplitedTaskForm, CreateOrUpdateCourseForm, CreateOrUpdatePostForm
+from .models import Courses, Posts, CompletedTaskModel, Category, Comments
+from .forms import ComplitedTaskForm, CreateOrUpdateCourseForm, CreateOrUpdatePostForm, CommentForm
 from django.views.generic import ListView, DeleteView, UpdateView, DetailView, CreateView, TemplateView
 
 
@@ -20,16 +22,25 @@ class ShowCourses(ListView):
         return context
 
 
-class ShowPosts(ListView):
+class ShowPosts(CreateView):
     model = Posts
     template_name = 'courses_posts.html'
     extra_context = {'title': 'Информция'}
+    form_class = CommentForm
+
+    def form_valid(self, form):
+        fs = form.save(commit=False)
+        fs.author = self.request.user
+        fs.course_id = self.kwargs['course_id']
+        fs.save()
+        return HttpResponseRedirect(reverse('show_posts', args=[self.kwargs['course_id']]))
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['course'] = Courses.objects.get(id=self.kwargs['course_id'])
         context['posts'] = Posts.objects.filter(course_id=self.kwargs['course_id'])
-
+        context['comments'] = Comments.objects.filter(course_id=self.kwargs['course_id'])
+        context['count_comments'] = len(Comments.objects.filter(course_id=self.kwargs['course_id']))
         # список курсов у пользователя, чтобы потом исчезала кнопка "Вступить"
         if self.request.user.is_authenticated:
             context['user_courses'] = CustomUser.objects.get(username=self.request.user).user_courses.all()
@@ -40,6 +51,8 @@ class ShowPosts(ListView):
             else:
                 context['is_followed'] = False
         return context
+
+
 
 
 
@@ -192,4 +205,6 @@ def delete_post(request, pk, post_id):
     post = Posts.objects.get(id=post_id)
     post.delete()
     return HttpResponseRedirect(reverse('teaching'))
+
+
 
