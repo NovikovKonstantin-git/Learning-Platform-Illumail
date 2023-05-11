@@ -17,7 +17,6 @@
         Автор: {{ u_c.author }} ({{ u_c.author.first_name }}) <br>
         <div class="d-grid gap-2">
             <a class="btn btn-secondary" href="{{ u_c.get_absolute_url }}">Продолжить обучение</a>
-            <a class="btn btn-outline-secondary" href="{% url 'leave_the_course' u_c.pk %}">Покинуть курс</a>
         </div>
     </div>
     {% endfor %}

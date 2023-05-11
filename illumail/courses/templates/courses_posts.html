@@ -2,16 +2,17 @@
 
 {% block content %}
 <div class="container">
-<!--    {% for c in request.user.user_courses.all %}-->
-<!--    {{ c }}-->
-<!--    {% endfor %}-->
-    {% for u in allusers %}
-    {{ u }}
-    {% endfor %}
+    {% if request.user.is_authenticated %}
+        {% if is_followed %}
+        <a class="btn btn-secondary" href="{% url 'leave_the_course' course.id %}">Покинуть</a>
+        {% elif request.user == course.author %}
 
-    {% if request.user not in request.user.user_courses.all %}
-    <a class="btn btn-secondary" href="{% url 'join_the_course' course.id %}">Вступить</a>
-    {% endif %}
+        {% else %}
+        <a class="btn btn-secondary" href="{% url 'join_the_course' course.id %}">Вступить</a>
+        {% endif %}
+    {% else %}
+        <h5>Авторизуйтесь, чтобы вступить</h5>
+{% endif %}
 
     {% if request.user == course.author %}
     <a class="btn btn-secondary" href="{% url 'update_course' course.id %}">Изменить курс</a>

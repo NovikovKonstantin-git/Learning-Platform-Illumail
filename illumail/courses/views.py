@@ -31,8 +31,16 @@ class ShowPosts(ListView):
         context['posts'] = Posts.objects.filter(course_id=self.kwargs['course_id'])
 
         # список курсов у пользователя, чтобы потом исчезала кнопка "Вступить"
-        context['user_courses'] = CustomUser.objects.get(username=self.request.user).user_courses.all()
+        if self.request.user.is_authenticated:
+            context['user_courses'] = CustomUser.objects.get(username=self.request.user).user_courses.all()
+
+            context['is_followed'] = False
+            if Courses.objects.get(id=self.kwargs['course_id']) in CustomUser.objects.get(id=self.request.user.id).user_courses.all():
+                context['is_followed'] = True
+            else:
+                context['is_followed'] = False
         return context
+
 
 
 # class ShowThePostAndCompletedTasks(UpdateView):
