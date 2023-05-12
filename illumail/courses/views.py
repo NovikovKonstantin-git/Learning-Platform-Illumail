@@ -137,7 +137,7 @@ def delete_course(request, pk):
 
 class SearchCourse(ListView):
     model = Courses
-    template_name = 'courses.html'
+    template_name = 'search_courses.html'
     context_object_name = 'courses'
     extra_context = {'title': 'Поиск курсов', 'subtitle': 'По Вашему запросу найдено:'}
 
