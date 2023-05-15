@@ -12,6 +12,7 @@ class CustomUser(AbstractUser):
     time_updated = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
     user_courses = models.ManyToManyField('courses.Courses', blank=True, verbose_name='Курсы')
     subscriptions = models.ManyToManyField("CustomUser", blank=True, verbose_name='Подписки')
+    user_groups = models.ManyToManyField('study_groups.StudyGroup', blank=True, verbose_name='Учебные группы')
 
     def users_courses(self):
         return [c.title for c in self.user_courses.all()]

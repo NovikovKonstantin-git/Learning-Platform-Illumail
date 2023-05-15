@@ -4,6 +4,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import FormMixin
 
 from courses.templatetags import news_tags
+from study_groups.models import StudyGroup
 from users.models import CustomUser
 from .models import Courses, Posts, CompletedTaskModel, Category, Comments
 from .forms import ComplitedTaskForm, CreateOrUpdateCourseForm, CreateOrUpdatePostForm, CommentForm
@@ -148,8 +149,13 @@ class SearchCourse(ListView):
 class Teaching(ListView):
     model = Courses
     template_name = 'teaching.html'
-    context_object_name = 'courses'
     extra_context = {'title': 'Преподавание'}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['courses'] = Courses.objects.filter(author=self.request.user.id)
+        context['groups'] = StudyGroup.objects.filter(author=self.request.user.id)
+        return context
 
 
 def category_courses(request, category_id):
@@ -160,12 +166,15 @@ def category_courses(request, category_id):
 
 
 class Learning(ListView):
+    model = CustomUser
     template_name = 'learning.html'
     extra_context = {'title': 'Обучение', 'subtitle': 'Изучаемые курсы:'}
-    context_object_name = 'user_courses'
 
-    def get_queryset(self):
-        return CustomUser.objects.get(id=self.request.user.id).user_courses.all()
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_courses'] = CustomUser.objects.get(id=self.request.user.id).user_courses.all()
+        context['user_groups'] = CustomUser.objects.get(id=self.request.user.id).user_groups.all()
+        return context
 
 
 def join_the_course(request, pk):

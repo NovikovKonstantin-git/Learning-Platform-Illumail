@@ -12,9 +12,9 @@
         {% if u_c.course_photo %}
         <img src="{{ u_c.course_photo.url }}" class="card-img-top" alt="" height="175"> <br>
         {% endif %}
-        Дата создания: {{ u_c.time_created }} <br>
-        Дата изменения: {{ u_c.time_updated }} <br>
-        Автор: {{ u_c.author }} ({{ u_c.author.first_name }}) <br>
+            <h6>Дата создания: {{ u_c.time_created }}</h6>
+            <h6>Дата изменения: {{ u_c.time_updated }}</h6>
+            <h6>Автор: {{ u_c.author }} ({{ u_c.author.first_name }})</h6>
         <div class="d-grid gap-2">
             <a class="btn btn-secondary" href="{{ u_c.get_absolute_url }}">Продолжить обучение</a>
         </div>
@@ -22,4 +22,25 @@
     {% endfor %}
 </div>
 
+<hr>
+
+<div class="container">
+    <h3 align="center">Учебные группы:</h3>
+    {% for ug in user_groups %}
+    <div class="card" style="width: 21rem; display: inline-block; margin-right: 30px; margin-bottom: 30px;">
+        <div class="card-header">
+            <h3 style="height: 6rem; text-align: center;">{{ ug.title }}</h3>
+        </div>
+        {% if ug.group_photo %}
+            <img src="{{ ug.group_photo.url }}" class="card-img-top" alt="" height="175"> <br>
+        {% endif %}
+        <h6>Дата создания: {{ ug.time_created }}</h6>
+        <h6>Дата изменения: {{ ug.time_updated }}</h6>
+        <h6>Автор: {{ ug.author }} ({{ ug.author.first_name }})</h6>
+        <div class="d-grid gap-2">
+            <a class="btn btn-secondary" href="{{ ug.get_absolute_url }}">Продолжить обучение</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

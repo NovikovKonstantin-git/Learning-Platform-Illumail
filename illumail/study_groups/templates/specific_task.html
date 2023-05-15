@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+        {% if request.user == post.study_group.author %}
+            <a class="btn btn-secondary" href="{% url 'delete_task' post.study_group.id post.id %}">Удалить задание</a><br><br>
+        {% endif %}
+
+    <div class="row">
+        <div class="card" style="width: 35rem; display: inline-block;">
+            <h3 class="card-header" align="center">{{ post.title }}</h3>
+            Курс: {{ post.study_group }} <br>
+            {% if post.photo %}
+            <img src="{{ post.photo.url }}" alt="" class="card-img-top" height="220"> <br>
+            {% endif %}
+
+            {% if post.file %}
+            {{ post.file }} <br>
+            {% endif %}
+
+            {% if post.post_text %}
+            {{ post.post_text }} <br>
+            {% endif %}
+
+            Дата создания: {{ post.time_created }} <br>
+            Дата изменения: {{ post.time_updated }} <br>
+        </div>
+
+        {% if post.post_type == "2" %}
+        {% if user.is_authenticated %}
+        <br> <br>
+        <div class="col-sm-5 px-sm-5">
+            <div class="card">
+                <h4 class="card-header">Выполненные задания</h4>
+                <div class="card-body">
+                    <h5 class="card-title">Прикрепите сюда выполненные здания</h5>
+                    <form method="post" enctype="multipart/form-data" autocomplete="off">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-secondary">Сдать</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

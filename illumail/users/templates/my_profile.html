@@ -4,21 +4,23 @@
 <div class="container">
 
     {% if user.photo %}
-    <img src="{{ user.photo.url }}" alt="" width="200" style="border-radius: 10%;">
+    <div id="pic" style="float: left; margin-right: 20px">
+        <img src="{{ user.photo.url }}" alt="" width="200" style="border-radius: 10%;">
+    </div>
     {% endif %}
-
-    <h6>Имя: {{ user.first_name }}</h6>
-    <h6>Фамилия: {{ user.last_name }}</h6>
-    <h6>Отчество: {{ user.patronymic }}</h6>
-    <h6>Имя пользователя: {{ user.username }}</h6>
-    <h6>Эл.почта: {{ user.email }}</h6>
-    <h6>О себе: {{ user.bio }}</h6>
-    <h6>Дата регистрации: {{ user.time_created }}</h6>
-    <h6>Дата измененения: {{ user.time_updated }}</h6>
-    <a class="btn btn-secondary" href="{% url 'update_profile' user.id %}">Изменить</a>
-    <a class="btn btn-secondary" href="{% url 'logout_user' %}">Выйти из аккаунта</a>
-    <a class="btn btn-secondary" href="{% url 'my_subscriptions' user.id %}">Подписки {{ cnt_sbs }}</a>
-    <br><br><br>
-
+    <div align="text">
+        <h6>Имя: {{ user.first_name }}</h6>
+        <h6>Фамилия: {{ user.last_name }}</h6>
+        <h6>Отчество: {{ user.patronymic }}</h6>
+        <h6>Имя пользователя: {{ user.username }}</h6>
+        <h6>Эл.почта: {{ user.email }}</h6>
+        <h6>О себе: {{ user.bio }}</h6>
+        <h6>Дата регистрации: {{ user.time_created }}</h6>
+        <h6>Дата измененения: {{ user.time_updated }}</h6>
+        <a class="btn btn-secondary" href="{% url 'update_profile' user.id %}">Изменить</a>
+        <a class="btn btn-secondary" href="{% url 'logout_user' %}">Выйти из аккаунта</a>
+        <a class="btn btn-secondary" href="{% url 'my_subscriptions' user.id %}">Подписки {{ cnt_sbs }}</a>
+        <br><br><br>
+    </div>
 </div>
 {% endblock %}

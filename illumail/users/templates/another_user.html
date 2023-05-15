@@ -3,7 +3,9 @@
 {% block content %}
 <div class="container">
     {% if another_user.photo %}
-    <img src="{{ another_user.photo.url }}" alt="" width="200" style="border-radius: 10%;">
+    <div id="pic" style="float: left; margin-right: 20px">
+        <img src="{{ another_user.photo.url }}" alt="" width="200" style="border-radius: 10%;">
+    </div>
     {% endif %}
 
     <h6>Имя: {{ another_user.first_name }}</h6>
@@ -15,14 +17,28 @@
     <h6>Дата регистрации: {{ another_user.time_created }}</h6>
     <h6>Дата измененения: {{ another_user.time_updated }}</h6>
 
+    {% if another_user.username != request.user.username %}
     {% if is_followed %}
     <a class="btn btn-secondary" href="{% url 'unsubscribe' another_user.pk %}">Отписаться</a>
     {% else %}
     <a class="btn btn-secondary" href="{% url 'add_subscription' another_user.pk %}">Подписаться</a>
     {% endif %}
+    {% endif %} <br><br>
 
-
-
-
+    <h5 align="center">Курсы, в которые вступил {{ another_user.username }}: </h5>
+    {% for user_courses in another_user_courses %}
+    <div class="card" style="display: inline-block; margin-right: 30px; margin-bottom: 30px;">
+        <div class="card-header">
+            <h6 align="center">{{ user_courses.title }}</h6>
+        </div>
+        {% if user_courses.course_photo %}
+        <img src="{{ user_courses.course_photo.url }}" alt="" width="230" height="110">
+        {% endif %}
+        <div class="d-grid gap-2">
+            <a class="btn btn-secondary" href="{{ user_courses.get_absolute_url }}">Подробнее</a>
+        </div>
+    </div>
+    {% endfor %}
+    <br>
 </div>
 {% endblock %}
