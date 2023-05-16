@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <a class="btn btn-secondary" href="{% url 'create_course' %}">Создать курс</a>
-    <a class="btn btn-outline-secondary" href="">Создать учебную группу</a>
+    <a class="btn btn-secondary" href="{% url 'create_group' %}">Создать учебную группу</a>
     <h3 align="center">Преподавание</h3>
     {% for c in courses %}
     {% if request.user == c.author %}
@@ -28,7 +28,7 @@
     {% for g in groups %}
     <div class="card" style="width: 21rem; display: inline-block; margin-right: 30px; margin-bottom: 30px;">
         <div class="card-header">
-            <h3 align="center">{{ g.title }}</h3>
+            <h3 align="center" style="height: 6rem; text-align: center;">{{ g.title }}</h3>
         </div>
         {% if g.group_photo %}
         <img src="{{ g.group_photo.url }}" class="card-img-top" alt="" height="175"> <br>

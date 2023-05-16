@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+    <div class="container">
+        {% csrf_token %}
+
+        <p>Название группы: {{ form.title }}<p>
+        <p>Описание группы: {{ form.about_the_group }}</p>
+        <p>Изображение курса на данный момент:</p>
+        <p><img src="{{ group.group_photo.url }}" alt="" width="350"></p>
+
+        <div class="row">
+            <label>Новое фото группы:</label>
+            <input type="file" id="id_group_photo" name="group_photo"/>
+        </div>
+        <br>
+        <div class="row">
+            <span id="output"></span>
+        </div>
+        <br>
+
+        <button class="btn btn-secondary">Сохранить изменения</button>
+        <br> <br>
+    </div>
+</form>
+
+{% block javascript %}
+<script src="{% static 'study_groups/js/script.js' %}"></script>
+{% endblock %}
+
+{% endblock %}

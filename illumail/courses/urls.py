@@ -17,4 +17,5 @@ urlpatterns = [
     path('news/', ShowNews.as_view(), name='show_news'),
     path('courses/<int:course_id>/posts/create/', CreatePost.as_view(), name='create_post'),
     path('courses/<int:pk>/posts/<int:post_id>/delete/', delete_post, name='delete_post'),
+    # Study Group
 ]

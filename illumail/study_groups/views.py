@@ -1,10 +1,10 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.views.generic import ListView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView
 from users.models import CustomUser
 from .models import PostsInStudyGroup, StudyGroup
-from study_groups.forms import *
+from .forms import *
 
 
 class ShowPostsGroups(ListView):
@@ -57,3 +57,47 @@ def delete_task(request, pk, post_id):
     task.delete()
     return HttpResponseRedirect(reverse('show_posts_group', args=[study_group.id]))
 
+
+class CreateGroup(CreateView):
+    form_class = CreateOrUpdateGroupForm
+    template_name = 'create_group.html'
+    success_url = reverse_lazy('teaching')
+    extra_context = {'title': 'Создание группы'}
+
+    def form_valid(self, form):
+        fs = form.save(commit=False)
+        fs.author = self.request.user
+        fs.save()
+        return redirect('teaching')
+
+
+class UpdateGroup(UpdateView):
+    form_class = CreateOrUpdateGroupForm
+    template_name = 'update_group.html'
+    extra_context = {'title': 'Изменить группу'}
+    context_object_name = 'group'
+    queryset = StudyGroup.objects.all()
+
+    def form_valid(self, form):
+        fs = form.save(commit=False)
+        fs.author = self.request.user
+        fs.save()
+        return redirect('teaching')
+
+
+def delete_group(request, pk):
+    group = StudyGroup.objects.get(id=pk)
+    group.delete()
+    return HttpResponseRedirect(reverse('teaching'))
+
+
+class CreateTask(CreateView):
+    form_class = CreateOrUpdatePostForm
+    template_name = 'create_new_task.html'
+    extra_context = {'title': 'Создание задания'}
+
+    def form_valid(self, form):
+        fs = form.save(commit=False)
+        fs.study_group_id = self.kwargs['study_group_id']
+        fs.save()
+        return redirect('show_posts_group', pk=fs.study_group_id)

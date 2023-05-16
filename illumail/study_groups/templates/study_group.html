@@ -15,9 +15,9 @@
     {% endif %}
 
     {% if request.user == study_group.author %}
-    <a class="btn btn-outline-secondary" href="">Изменить группу</a>
-    <a class="btn btn-outline-secondary" href="">Удалить группу</a>
-    <a class="btn btn-outline-secondary" href="">Добавить задание</a>
+    <a class="btn btn-secondary" href="{% url 'update_group' study_group.pk %}">Изменить группу</a>
+    <a class="btn btn-secondary" href="{% url 'delete_group' study_group.pk %}">Удалить группу</a>
+    <a class="btn btn-secondary" href="{% url 'create_task' study_group.id %}">Добавить задание</a>
     {% endif %}
     <br><br>
     <h5>О группе: {{ study_group.about_the_group|linebreaks }}</h5>

@@ -133,7 +133,7 @@ class UpdateCourse(UpdateView):
 def delete_course(request, pk):
     course = Courses.objects.get(id=pk)
     course.delete()
-    return HttpResponseRedirect(reverse('show_courses'))
+    return HttpResponseRedirect(reverse('teaching'))
 
 
 class SearchCourse(ListView):
@@ -214,6 +214,5 @@ def delete_post(request, pk, post_id):
     post = Posts.objects.get(id=post_id)
     post.delete()
     return HttpResponseRedirect(reverse('teaching'))
-
 
 
