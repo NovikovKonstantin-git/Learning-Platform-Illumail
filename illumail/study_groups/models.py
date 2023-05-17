@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator
 from django.db import models
 from django.urls import reverse
 
@@ -55,7 +56,7 @@ class PostsInStudyGroup(models.Model):
 class CompletedTaskInStudyGroup(models.Model):
     file = models.FileField(upload_to='compl_tasks/%Y/%m/%d', blank=True, verbose_name='Файл')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Пользователь')
-    post = models.ForeignKey(PostsInStudyGroup, on_delete=models.CASCADE, verbose_name='Учебная группа')
+    post = models.ForeignKey(PostsInStudyGroup, on_delete=models.CASCADE, verbose_name='Задание')
     time_load = models.DateTimeField(auto_now_add=True, verbose_name='Дата загрузки')
 
     def __str__(self):
@@ -65,3 +66,18 @@ class CompletedTaskInStudyGroup(models.Model):
         verbose_name = 'Выполненное задание'
         verbose_name_plural = 'Выполненные задания'
         ordering = ['-time_load', ]
+
+
+class Valuation(models.Model):
+    post_task = models.ForeignKey(PostsInStudyGroup, on_delete=models.PROTECT, verbose_name='Задание')
+    compl_task = models.ForeignKey(CompletedTaskInStudyGroup, on_delete=models.PROTECT, verbose_name='Выполненное задание')
+    user = models.ForeignKey(CustomUser, on_delete=models.PROTECT, verbose_name='Учащийся')
+    valuation_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата оценивания')
+    grade = models.IntegerField(validators=[MaxValueValidator(limit_value=10), ], verbose_name='Оценка')
+
+    def __str__(self):
+        return f"{self.user}-{self.post_task}"
+
+    class Meta:
+        verbose_name = 'Оценка'
+        verbose_name_plural = 'Оценки'

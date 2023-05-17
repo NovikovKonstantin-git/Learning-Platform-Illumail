@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h3 align="center">{{ subtitle }}</h3>
+    {% for v in valuations %}
+    <div class="card">
+        <div class="card-body">
+            <h5>
+                {% if v.user.photo %}
+                <img src="{{ v.user.photo.url }}" alt="" width="40" height="40">
+                {% endif %}
+                <a class="btn btn-outline-secondary" href="{% url 'another_user' v.user.pk %}">{{ v.user.username }}</a>
+            </h5>
+            <h5>Учащийся: {{ v.user.last_name }} {{ v.user.first_name }} {{ v.user.patronymic }} ({{ v.user }})</h5>
+            <h5>Задание: {{ v.post_task }}</h5>
+            <h5>Выполненное задание: {{ v.compl_task }}</h5>
+            <h5>Оценка: {{ v.grade }}</h5>
+            <h5>Дата оценивания: {{ v.valuation_date }}</h5>
+
+        </div>
+    </div>
+    <br>
+    {% endfor %}
+</div>
+{% endblock %}

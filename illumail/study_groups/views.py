@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView
 from users.models import CustomUser
-from .models import PostsInStudyGroup, StudyGroup
+from .models import PostsInStudyGroup, StudyGroup, Valuation
 from .forms import *
 
 
@@ -112,4 +112,15 @@ class ShowStudents(ListView):
         context = super().get_context_data(**kwargs)
         context['all_users'] = CustomUser.objects.all()
         context['students'] = StudyGroup.objects.get(id=self.kwargs['pk']).customuser_set.all()
+        return context
+
+
+class ShowValuations(ListView):
+    model = Valuation
+    template_name = 'valuations.html'
+    extra_context = {'title': 'Оценки', 'subtitle': 'Оценки учащихся за задание'}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['valuations'] = Valuation.objects.filter(post_task_id=PostsInStudyGroup.objects.get(id=self.kwargs['post_id']))
         return context

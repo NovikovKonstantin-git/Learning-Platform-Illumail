@@ -4,7 +4,7 @@
 <div class="container">
         {% if request.user == post.study_group.author %}
             <a class="btn btn-secondary" href="{% url 'delete_task' post.study_group.id post.id %}">Удалить задание</a>
-            <a class="btn btn-outline-secondary" href="">Оценки учащихся</a><br><br>
+            <a class="btn btn-secondary" href="{% url 'show_valuations' post.study_group.id post.id %}">Оценки за задание</a><br><br>
         {% endif %}
 
     <div class="row">

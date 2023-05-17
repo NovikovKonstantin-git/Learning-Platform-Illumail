@@ -7,7 +7,9 @@
     <div class="card">
         <div class="card-body">
             <h5>
+                {% if st.photo %}
                 <img src="{{ st.photo.url }}" alt="" width="40" height="40">
+                {% endif %}
                 <a class="btn btn-outline-secondary" href="{% url 'another_user' st.pk %}">{{ st.username }}</a>
             </h5>
             <h5>{{ st.last_name }} {{ st.first_name }} {{ st.patronymic }}</h5>
