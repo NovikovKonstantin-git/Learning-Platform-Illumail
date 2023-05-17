@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+<h3 align="center">{{ subtitle }}:</h3>
+{% for st in students %}
+    <div class="card">
+        <div class="card-body">
+            <h5>
+                <img src="{{ st.photo.url }}" alt="" width="40" height="40">
+                <a class="btn btn-outline-secondary" href="{% url 'another_user' st.pk %}">{{ st.username }}</a>
+            </h5>
+            <h5>{{ st.last_name }} {{ st.first_name }} {{ st.patronymic }}</h5>
+            <h5></h5>
+        </div>
+    </div>
+    <br>
+{% endfor %}
+</div>
+{% endblock %}

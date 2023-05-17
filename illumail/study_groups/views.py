@@ -101,3 +101,15 @@ class CreateTask(CreateView):
         fs.study_group_id = self.kwargs['study_group_id']
         fs.save()
         return redirect('show_posts_group', pk=fs.study_group_id)
+
+
+class ShowStudents(ListView):
+    model = StudyGroup
+    template_name = 'students.html'
+    extra_context = {'title': 'Учащиеся', 'subtitle': 'Учащиеся данной группы'}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['all_users'] = CustomUser.objects.all()
+        context['students'] = StudyGroup.objects.get(id=self.kwargs['pk']).customuser_set.all()
+        return context
