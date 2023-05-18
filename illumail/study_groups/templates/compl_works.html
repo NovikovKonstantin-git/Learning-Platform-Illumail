@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h3 align="center">{{ subtitle }}</h3>
+    {% for cw in compl_works %}
+    <div class="card">
+        <div class="card-body">
+            <h5>
+                {% if cw.user.photo %}
+                <img src="{{ cw.user.photo.url }}" alt="" width="40" height="40">
+                {% endif %}
+                <a class="btn btn-outline-secondary" href="{% url 'another_user' cw.user.pk %}">{{ cw.user.username }}</a>
+            </h5>
+            <h5>Учащийся: {{ cw.user.last_name }} {{ cw.user.first_name }} {{ cw.user.patronymic }} ({{ cw.user }})</h5>
+            <h5>Задание: {{ cw.post }}</h5>
+            <h5>Выполненное задание: {{ cw.file }}</h5>
+            <h5>Оценка: {{ cw.grade }}</h5>
+            <h5>Дата сдачи работы: {{ cw.time_load }}</h5>
+        </div>
+    </div>
+
+<br>
+
+<form method="post" enctype="multipart/form-data" autocomplete="off">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-secondary">Поставить оценку</button>
+</form>
+
+<br>
+{% endfor %}
+</div>
+
+{% endblock %}

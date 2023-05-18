@@ -115,12 +115,19 @@ class ShowStudents(ListView):
         return context
 
 
-class ShowValuations(ListView):
-    model = Valuation
-    template_name = 'valuations.html'
-    extra_context = {'title': 'Оценки', 'subtitle': 'Оценки учащихся за задание'}
+class ShowValuations(CreateView):
+    form_class = UpdateValuations
+    template_name = 'compl_works.html'
+    extra_context = {'title': 'Оценки', 'subtitle': 'Работы и оценки учащихся'}
+
+    def form_valid(self, form):
+        fs = form.save(commit=False)
+        fs.post_id = self.kwargs['post_id']
+        fs.user_id = self.request.user.id
+        fs.save()
+        return HttpResponseRedirect(reverse('show_valuations', args=[self.kwargs['pk'], self.kwargs['post_id']]))
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['valuations'] = Valuation.objects.filter(post_task_id=PostsInStudyGroup.objects.get(id=self.kwargs['post_id']))
+        context['compl_works'] = CompletedTaskInStudyGroup.objects.filter(post_id=PostsInStudyGroup.objects.get(pk=self.kwargs['post_id']))
         return context

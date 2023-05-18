@@ -24,3 +24,10 @@ class CreateOrUpdatePostForm(forms.ModelForm):
     class Meta:
         model = PostsInStudyGroup
         fields = ['title', 'photo', 'file', 'post_text', 'post_type']
+
+
+class UpdateValuations(forms.ModelForm):
+    class Meta:
+        model = CompletedTaskInStudyGroup
+        fields = ['grade', ]
+
