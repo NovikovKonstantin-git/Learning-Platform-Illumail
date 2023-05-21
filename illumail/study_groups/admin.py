@@ -15,8 +15,8 @@ class PostsInStudyGroupAdmin(admin.ModelAdmin):
 
 
 class ComplitedTaskInStudyGroupAdmin(admin.ModelAdmin):
-    list_display = ('user', 'file', 'post', 'time_load')
-    list_filter = ('user', 'time_load')
+    list_display = ('user', 'grade', 'file', 'post', 'time_load')
+    list_filter = ('user', 'grade', 'time_load')
     search_fields = ('user', )
 
 

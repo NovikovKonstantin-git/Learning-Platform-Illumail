@@ -19,12 +19,16 @@
             <h5>Дата сдачи работы: {{ cw.time_load }}</h5>
         </div>
     </div>
-
 <br>
 
-<form method="post" enctype="multipart/form-data" autocomplete="off">
+
+{#    <a class="btn btn-secondary" href="{% url 'show_work' cw.post.study_group.id cw.post.id cw.id %}">Подробнее</a> #}
+
+
+<form method="post" enctype="multipart/form-data" autocomplete="off" action="{% url 'save_update_valuations' cw.post.study_group.id cw.post.id cw.id %}">
     {% csrf_token %}
-    {{ form.as_p }}
+    <label>Оценка:</label>
+    <input type="text" name="grade" id="" value="{{ cw.grade }}">
     <button class="btn btn-secondary">Поставить оценку</button>
 </form>
 

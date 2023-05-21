@@ -39,7 +39,7 @@ def show_specific_task(request, pk, post_id):
                 file_instance.user = request.user
                 file_instance.post = post
                 file_instance.save()
-            return HttpResponseRedirect(reverse('show_posts_group', args=[post.id]))
+            return HttpResponseRedirect(reverse('show_posts_group', args=[post.study_group.pk]))
     else:
         form = ComplitedTaskGroupForm()
 
@@ -131,3 +131,32 @@ class ShowValuations(CreateView):
         context = super().get_context_data(**kwargs)
         context['compl_works'] = CompletedTaskInStudyGroup.objects.filter(post_id=PostsInStudyGroup.objects.get(pk=self.kwargs['post_id']))
         return context
+
+
+def show_valuations(request, pk, post_id):
+    study_group = StudyGroup.objects.get(pk=pk)
+    compl_works = CompletedTaskInStudyGroup.objects.filter(post_id=PostsInStudyGroup.objects.get(pk=post_id))
+    form = UpdateValuations()
+    if request.method == "POST":
+        form = UpdateValuations(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(reverse('show_valuations', args=[study_group.id, post_id]))
+    return render(request, 'compl_works.html', {'study_group': study_group, 'compl_works': compl_works, 'form': form})
+
+
+def save_update_valuations(request, pk, post_id, work_id):
+    study_group = StudyGroup.objects.get(pk=pk)
+    compl_works = CompletedTaskInStudyGroup.objects.filter(post_id=PostsInStudyGroup.objects.get(pk=post_id))
+    work = CompletedTaskInStudyGroup.objects.get(pk=work_id)
+    if request.method == "POST":
+        form = UpdateValuations(request.POST, request.FILES, instance=work)
+        if form.is_valid():
+            fs = form.save(commit=False)
+            fs.post_id = PostsInStudyGroup.objects.get(pk=post_id).id #?
+            fs.grade = form.cleaned_data['grade']
+            fs.save()
+    return HttpResponseRedirect(reverse('show_valuations', args=[study_group.id, post_id]))
+
+
+
