@@ -58,7 +58,7 @@ class CompletedTaskInStudyGroup(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Пользователь')
     post = models.ForeignKey(PostsInStudyGroup, on_delete=models.CASCADE, verbose_name='Задание')
     time_load = models.DateTimeField(auto_now_add=True, verbose_name='Дата загрузки')
-    grade = models.IntegerField(validators=[MaxValueValidator(limit_value=10), ], verbose_name='Оценка', default="3")
+    grade = models.IntegerField(validators=[MaxValueValidator(limit_value=10), ], verbose_name='Оценка', default="0")
 
     def __str__(self):
         return f"{self.file}"

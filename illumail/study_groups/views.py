@@ -91,6 +91,11 @@ def delete_group(request, pk):
     return HttpResponseRedirect(reverse('teaching'))
 
 
+def leave_the_group(request, pk):
+    StudyGroup.objects.get(id=pk).customuser_set.remove(request.user)
+    return HttpResponseRedirect(reverse('learning'))
+
+
 class CreateTask(CreateView):
     form_class = CreateOrUpdatePostForm
     template_name = 'create_new_task.html'
@@ -157,6 +162,3 @@ def save_update_valuations(request, pk, post_id, work_id):
             fs.grade = form.cleaned_data['grade']
             fs.save()
     return HttpResponseRedirect(reverse('show_valuations', args=[study_group.id, post_id]))
-
-
-

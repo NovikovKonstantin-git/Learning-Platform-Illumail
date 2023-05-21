@@ -3,8 +3,9 @@
 {% block content %}
 <div class="container">
     {% if request.user.is_authenticated %}
+        <a class="btn btn-secondary" href="{% url 'show_students' study_group.id %}">Учащиеся</a>
         {% if is_followed %}
-            <a class="btn btn-outline-secondary" href="">Покинуть</a>
+            <a class="btn btn-secondary" href="{% url 'leave_the_group' study_group.pk %}">Покинуть</a>
         {% elif request.user == study_group.author %}
 
         {% else %}
@@ -13,12 +14,10 @@
     {% else %}
         <h5><i>Авторизуйтесь, чтобы вступить</i></h5>
     {% endif %}
-
     {% if request.user == study_group.author %}
     <a class="btn btn-secondary" href="{% url 'update_group' study_group.pk %}">Изменить группу</a>
     <a class="btn btn-secondary" href="{% url 'delete_group' study_group.pk %}">Удалить группу</a>
     <a class="btn btn-secondary" href="{% url 'create_task' study_group.id %}">Добавить задание</a><br><br>
-    <a class="btn btn-secondary" href="{% url 'show_students' study_group.id %}">Учащиеся</a>
     {% endif %}
     <br><br>
     <h5>О группе: {{ study_group.about_the_group|linebreaks }}</h5>
