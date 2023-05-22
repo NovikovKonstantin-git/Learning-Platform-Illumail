@@ -20,6 +20,7 @@
     <a class="btn btn-secondary" href="{% url 'create_task' study_group.id %}">Добавить задание</a><br><br>
     {% endif %}
     <br><br>
+    <h5>Код группы: {{ study_group.group_code }}</h5>
     <h5>О группе: {{ study_group.about_the_group|linebreaks }}</h5>
     <h5>Преподаватель: {{ study_group.author.last_name }} {{ study_group.author.first_name }} {{ study_group.author.patronymic }}</h5>
     <a class="btn btn-secondary" href="{% url 'another_user' study_group.author.pk %}">Посетить</a><br><br>

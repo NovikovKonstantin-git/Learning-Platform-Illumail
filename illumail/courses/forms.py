@@ -15,7 +15,7 @@ class CreateOrUpdateCourseForm(forms.ModelForm):
 
     class Meta:
         model = Courses
-        fields = ['title', 'course_photo', 'about_the_course']
+        fields = ['title', 'course_photo', 'about_the_course', 'category']
 
 
 class CreateOrUpdatePostForm(forms.ModelForm):

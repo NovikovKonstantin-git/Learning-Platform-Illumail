@@ -7,7 +7,8 @@
     <form method="post" autocomplete="off" enctype="multipart/form-data">
         {% csrf_token %}
         Название курса: {{ form.title }} <br> <br>
-        Описание курса: {{ form.about_the_course }}
+        Описание курса: {{ form.about_the_course }} <br><br>
+        Категория курса: {{ form.category }}
         <div class="row">
             <label>Фото курса:</label>
             <input type="file" id="id_course_photo" name="course_photo"/>

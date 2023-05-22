@@ -10,8 +10,9 @@ urlpatterns = [
     path('study_group/<int:pk>/update/', UpdateGroup.as_view(), name='update_group'),
     path('study_group/<int:pk>/delete/', delete_group, name='delete_group'),
     path('study_group/<int:study_group_id>/posts/create/', CreateTask.as_view(), name='create_task'),
-    path('study_group/<int:pk>/students', ShowStudents.as_view(), name='show_students'),
+    path('study_group/<int:pk>/students/', ShowStudents.as_view(), name='show_students'),
     path('study_group/<int:pk>/posts/<int:post_id>/grades/', show_valuations, name='show_valuations'),
     path('study_group/<int:pk>/posts/<int:post_id>/grades/<int:work_id>/', save_update_valuations, name='save_update_valuations'),
     path('study_group/<int:pk>/posts/leave_the_group/', leave_the_group, name='leave_the_group'),
+    path('study_group/join_the_group', join_the_group, name='join_the_group'),
 ]

@@ -26,6 +26,13 @@
 
 <div class="container">
     <h3 align="center">Учебные группы:</h3>
+
+    <form action="{% url 'join_the_group' %}" method="get">
+        <input autocomplete="off" type="text" placeholder="Введите код"
+               aria-label="Code" name="code">
+        <button class="btn btn-outline-secondary" type="submit">Вступить</button>
+    </form>
+
     {% for ug in user_groups %}
     <div class="card" style="width: 21rem; display: inline-block; margin-right: 30px; margin-bottom: 30px;">
         <div class="card-header">

@@ -47,6 +47,7 @@ def show_specific_task(request, pk, post_id):
         'posts_in_group': posts_in_group,
         'post': post,
         'form': form,
+        'title': post.title,
     }
     return render(request, 'specific_task.html', context)
 
@@ -147,7 +148,11 @@ def show_valuations(request, pk, post_id):
         if form.is_valid():
             form.save()
         return HttpResponseRedirect(reverse('show_valuations', args=[study_group.id, post_id]))
-    return render(request, 'compl_works.html', {'study_group': study_group, 'compl_works': compl_works, 'form': form})
+
+    context = {
+        'study_group': study_group, 'compl_works': compl_works, 'form': form, 'title': 'Работы и оценки'
+    }
+    return render(request, 'compl_works.html', context)
 
 
 def save_update_valuations(request, pk, post_id, work_id):
@@ -162,3 +167,9 @@ def save_update_valuations(request, pk, post_id, work_id):
             fs.grade = form.cleaned_data['grade']
             fs.save()
     return HttpResponseRedirect(reverse('show_valuations', args=[study_group.id, post_id]))
+
+
+def join_the_group(request):
+    code = StudyGroup.objects.get(group_code=request.GET.get('code', ))
+    StudyGroup.objects.get(id=code.pk).customuser_set.add(request.user)
+    return HttpResponseRedirect(reverse('learning'))

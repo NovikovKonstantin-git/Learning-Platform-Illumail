@@ -3,7 +3,7 @@ from .models import StudyGroup, PostsInStudyGroup, CompletedTaskInStudyGroup, Va
 
 
 class StudyGroupAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'time_created', 'time_updated')
+    list_display = ('title', 'author', 'group_code', 'time_created', 'time_updated')
     list_filter = ('title', 'time_created')
     search_fields = ('title', )
 

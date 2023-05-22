@@ -1,8 +1,8 @@
 from django.core.validators import MaxValueValidator
 from django.db import models
 from django.urls import reverse
-
 from users.models import CustomUser
+from .rand_code import generate_alphanum_crypt_string
 
 
 class StudyGroup(models.Model):
@@ -14,6 +14,7 @@ class StudyGroup(models.Model):
     time_updated = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
     author = models.ForeignKey(CustomUser, on_delete=models.PROTECT, verbose_name='Автор группы',
                                related_name='study_groups')
+    group_code = models.CharField(max_length=10, default=generate_alphanum_crypt_string, verbose_name='Код группы', unique=True)
 
     def get_absolute_url(self):
         return reverse('show_posts_group', kwargs={'pk': self.pk})
