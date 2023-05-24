@@ -12,10 +12,11 @@ class ComplitedTaskForm(forms.ModelForm):
 
 class CreateOrUpdateCourseForm(forms.ModelForm):
     about_the_course = forms.CharField(widget=forms.Textarea(attrs={'cols': 85, 'rows': 15}))
+    type_course = forms.ChoiceField(choices=Courses.CHOICES, widget=forms.RadioSelect(), required=True)
 
     class Meta:
         model = Courses
-        fields = ['title', 'course_photo', 'about_the_course', 'category']
+        fields = ['title', 'course_photo', 'about_the_course', 'category', 'type_course', 'price']
 
 
 class CreateOrUpdatePostForm(forms.ModelForm):

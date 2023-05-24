@@ -3,7 +3,7 @@ from .models import Courses, Posts, CompletedTaskModel, Category, Comments
 
 
 class CoursesAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'category', 'time_created', 'time_updated')
+    list_display = ('title', 'author', 'category', 'type_course', 'price', 'time_created', 'time_updated')
     list_filter = ('title', 'category', 'time_created')
     search_fields = ('title', )
 

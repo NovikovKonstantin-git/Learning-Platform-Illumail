@@ -21,4 +21,9 @@ function handleFileSelect(evt) {
 document.getElementById('id_course_photo').addEventListener('change', handleFileSelect, false);
 
 
-
+document.getElementById('public').onclick = function() {
+      document.getElementById('text2').hidden = true;
+    }
+document.getElementById('paid').onclick = function() {
+      document.getElementById('text2').hidden = false;
+    }

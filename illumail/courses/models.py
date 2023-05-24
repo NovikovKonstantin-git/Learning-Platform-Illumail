@@ -5,6 +5,11 @@ from users.models import CustomUser
 
 
 class Courses(models.Model):
+    CHOICES = [
+        ('1', 'Публичный'),
+        ('2', 'Платный'),
+    ]
+
     title = models.CharField(max_length=300, verbose_name='Название')
     course_photo = models.ImageField(upload_to='courses_headers/%Y/%m/%d', default='dflt_crs_hdrs.jpg', verbose_name='Изображение курса')
     about_the_course = models.TextField(verbose_name='О курсе')
@@ -12,6 +17,8 @@ class Courses(models.Model):
     time_updated = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
     author = models.ForeignKey(CustomUser, on_delete=models.PROTECT, verbose_name='Автор курса', related_name='course')
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категория')
+    type_course = models.CharField(max_length=200, choices=CHOICES, default='1', verbose_name='Тип курса')
+    price = models.IntegerField(verbose_name='Цена', blank=True)
 
     def get_absolute_url(self):
         return reverse('show_posts', kwargs={'course_id': self.id})

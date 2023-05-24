@@ -8,7 +8,11 @@
         {% elif request.user == course.author %}
 
         {% else %}
-            <a class="btn btn-secondary" href="{% url 'join_the_course' course.id %}">Вступить</a>
+            {% if course.type_course == '1' %}
+                <a class="btn btn-secondary" href="{% url 'join_the_course' course.id %}">Вступить</a>
+            {% else %}
+                <a class="btn btn-outline-secondary">Купить</a>
+            {% endif %}
         {% endif %}
     {% else %}
         <h5><i>Авторизуйтесь, чтобы вступить</i></h5>
