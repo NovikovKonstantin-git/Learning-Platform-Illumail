@@ -25,8 +25,14 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('title', )
 
 
+class CommentsAdmin(admin.ModelAdmin):
+    list_display = ('comment_text', 'author', 'course', 'time_created')
+    list_filter = ('author', 'time_created', 'course')
+    search_fields = ('comment_text', )
+
+
 admin.site.register(Courses, CoursesAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Posts, PostsAdmin)
 admin.site.register(CompletedTaskModel, ComplitedTaskModelAdmin)
-admin.site.register(Comments)
+admin.site.register(Comments, CommentsAdmin)

@@ -1,8 +1,7 @@
+from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic.edit import FormMixin
-
 from courses.templatetags import news_tags
 from study_groups.models import StudyGroup
 from users.models import CustomUser
@@ -51,31 +50,10 @@ class ShowPosts(CreateView):
                 context['is_followed'] = True
             else:
                 context['is_followed'] = False
+        context.update({
+            "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY
+        })
         return context
-
-
-
-
-
-# class ShowThePostAndCompletedTasks(UpdateView):
-#     model = Posts
-#     pk_url_kwarg = 'post_id'
-#     form_class = ComplitedTaskForm
-#     template_name = 'specific_post.html'
-#
-#     def get_context_data(self, *, object_list=None, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['posts_in_course'] = Posts.objects.filter(course_id=self.kwargs['course_id'])
-#         context['post'] = Posts.objects.filter(id=self.kwargs['post_id'])
-#
-#     def form_valid(self, form):
-#         files = self.request.FILES.getlist('file')
-#         for f in files:
-#             file_instance = CompletedTaskModel(file=f)
-#             file_instance.user = self.request.user
-#             file_instance.post = self.request.post[0]
-#             file_instance.save()
-#         return redirect('show_courses')
 
 
 def show_specific_post(request, course_id, post_id):

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h3 align="center">Оплата</h3>
+    <img src=" {{ course.course_photo.url }}" alt="" width="200">
+    <h5>Название: {{ course.title }}</h5>
+    <h5>Автор: {{ course.author }}</h5>
+    <h5>Цена: {{ course.price }}</h5>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" id="checkout-button">Оплатить</button>
+    </form>
+</div>
+{% endblock %}
+
+
+

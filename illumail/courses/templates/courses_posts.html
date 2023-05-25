@@ -11,7 +11,7 @@
             {% if course.type_course == '1' %}
                 <a class="btn btn-secondary" href="{% url 'join_the_course' course.id %}">Вступить</a>
             {% else %}
-                <a class="btn btn-outline-secondary">Купить</a>
+                <a class="btn btn-outline-secondary" href="{% url 'payment' course.pk %}">Купить</a>
             {% endif %}
         {% endif %}
     {% else %}
@@ -67,3 +67,33 @@
     {% endfor %}<br><br>
 </div>
 {% endblock %}
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+var stripe = Stripe("{{ pk_test_51NBKWuAu80O9dq779iS9UZzXLFNmeuvnHofv2KiQ79w28BfEBLXNiGqrpZdSwuUCnuM8PayrOImZNE7ogFU0iQLB00Kz61pVrN }}");
+var checkoutButton = document.getElementById("checkout-button");
+checkoutButton.addEventListener("click", function () {
+  fetch("{% url 'payment' course.id %}", {
+    method: "POST",
+    headers: {
+        'X-CSRFToken': csrftoken
+    }
+  })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (session) {
+      return stripe.redirectToCheckout({ sessionId: session.id });
+    })
+    .then(function (result) {
+      if (result.error) {
+        alert(result.error.message);
+      }
+    })
+    .catch(function (error) {
+      console.error("Error:", error);
+    });
+});
+</script>
