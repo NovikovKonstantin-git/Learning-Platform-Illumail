@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <h5>Название: {{ test.title }}</h5>
+  <h5>Вопрос: {{ test.question }}</h5>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-secondary">Ответить</button>
+  </form>
+</div>
+{% endblock %}

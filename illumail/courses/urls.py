@@ -17,4 +17,8 @@ urlpatterns = [
     path('news/', ShowNews.as_view(), name='show_news'),
     path('courses/<int:course_id>/posts/create/', CreatePost.as_view(), name='create_post'),
     path('courses/<int:pk>/posts/<int:post_id>/delete/', delete_post, name='delete_post'),
+    path('courses/<int:pk>/posts/create_test/', CreateTest.as_view(), name='create_test'),
+    path('courses/<int:pk>/posts/test/<int:test_id>/', ShowSpecificTest.as_view(), name='show_specific_test'),
+    path('courses/sort/', SortCourses.as_view(), name='sort_courses'),
+    path('courses/filter/', FilterCourses.as_view(), name='filter_courses'),
 ]

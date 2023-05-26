@@ -100,3 +100,33 @@ class Comments(models.Model):
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
         ordering = ['-time_created']
+
+
+class Quiz(models.Model):
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE, verbose_name='Курс')
+    title = models.CharField(max_length=300, verbose_name='Название теста')
+    question = models.CharField(max_length=300, verbose_name='Вопрос')
+    true_answer = models.CharField(max_length=300, verbose_name='Правильный ответ')
+    time_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    time_updated = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
+
+    def __str__(self):
+        return f"{self.title}"
+
+    class Meta:
+        verbose_name = 'Тест с вписыванием ответа'
+        verbose_name_plural = 'Тесты с вписыванием ответа'
+        ordering = ['-time_created', ]
+
+
+class Answer(models.Model):
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, verbose_name='Тест')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Пользователь')
+    user_answer = models.CharField(max_length=300, verbose_name='Ответ пользователя')
+
+    def __str__(self):
+        return f"{self.quiz}"
+
+    class Meta:
+        verbose_name = 'Ответ на тест в вписыванем'
+        verbose_name_plural = 'Ответы на тест в вписыванем'

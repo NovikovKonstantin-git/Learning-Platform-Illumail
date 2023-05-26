@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Courses, Posts, CompletedTaskModel, Category, Comments
+from .models import *
 
 
 class CoursesAdmin(admin.ModelAdmin):
@@ -31,8 +31,18 @@ class CommentsAdmin(admin.ModelAdmin):
     search_fields = ('comment_text', )
 
 
+class QuizAdmin(admin.ModelAdmin):
+    list_display = ('course', 'title', 'question', 'true_answer')
+
+
+class AnswerAdmin(admin.ModelAdmin):
+    list_display = ('quiz', 'user', 'user_answer')
+
+
 admin.site.register(Courses, CoursesAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Posts, PostsAdmin)
 admin.site.register(CompletedTaskModel, ComplitedTaskModelAdmin)
 admin.site.register(Comments, CommentsAdmin)
+admin.site.register(Quiz, QuizAdmin)
+admin.site.register(Answer, AnswerAdmin)

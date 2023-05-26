@@ -6,7 +6,7 @@ from courses.templatetags import news_tags
 from study_groups.models import StudyGroup
 from users.models import CustomUser
 from .models import Courses, Posts, CompletedTaskModel, Category, Comments
-from .forms import ComplitedTaskForm, CreateOrUpdateCourseForm, CreateOrUpdatePostForm, CommentForm
+from .forms import *
 from django.views.generic import ListView, DeleteView, UpdateView, DetailView, CreateView, TemplateView
 
 
@@ -15,6 +15,52 @@ class ShowCourses(ListView):
     template_name = 'courses.html'
     context_object_name = 'courses'
     extra_context = {'title': 'Курсы', 'subtitle': 'Все курсы'}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['courses'] = Courses.objects.all()
+        context['categories'] = Category.objects.all()
+        context['sort'] = self.request.GET.get('sort')
+        if context['sort'] == ('new'):
+            return Courses.objects.order_by('-time_created')
+        if context['sort'] == ('old'):
+            return Courses.objects.order_by('time_created')
+        return context
+
+
+class SortCourses(ListView):
+    model = Courses
+    template_name = 'courses.html'
+    context_object_name = 'courses'
+
+    def get_queryset(self):
+        sort = self.request.GET.get('sort')
+        if sort == 'new':
+            return Courses.objects.order_by('-time_created')
+        if sort == 'old':
+            return Courses.objects.order_by('time_created')
+        if sort == 'cheap':
+            return Courses.objects.order_by('type_course')
+        if sort == 'expensive':
+            return Courses.objects.order_by('-type_course', '-time_created')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
+
+class FilterCourses(ListView):
+    model = Courses
+    template_name = 'courses.html'
+    context_object_name = 'courses'
+
+    def get_queryset(self):
+        filtration = self.request.GET.get('filter')
+        if filtration == 'free':
+            return Courses.objects.filter(type_course='1').order_by('-time_created')
+        if filtration == 'payment':
+            return Courses.objects.filter(type_course='2').order_by('-time_created')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -39,6 +85,7 @@ class ShowPosts(CreateView):
         context = super().get_context_data(**kwargs)
         context['course'] = Courses.objects.get(id=self.kwargs['course_id'])
         context['posts'] = Posts.objects.filter(course_id=self.kwargs['course_id'])
+        context['tests'] = Quiz.objects.filter(course_id=self.kwargs['course_id'])
         context['comments'] = Comments.objects.filter(course_id=self.kwargs['course_id'])
         context['count_comments'] = len(Comments.objects.filter(course_id=self.kwargs['course_id']))
         # список курсов у пользователя, чтобы потом исчезала кнопка "Вступить"
@@ -50,35 +97,36 @@ class ShowPosts(CreateView):
                 context['is_followed'] = True
             else:
                 context['is_followed'] = False
-        context.update({
-            "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY
-        })
         return context
 
 
 def show_specific_post(request, course_id, post_id):
     posts_in_course = Posts.objects.filter(course_id=course_id)
     post = Posts.objects.get(id=post_id)
-
-    if request.method == "POST":
-        form = ComplitedTaskForm(request.POST, request.FILES)
-        files = request.FILES.getlist('file')
-        if form.is_valid():
-            for f in files:
-                file_instance = CompletedTaskModel(file=f)
-                file_instance.user = request.user
-                file_instance.post = post
-                file_instance.save()
-            return redirect('show_courses')
-    else:
-        form = ComplitedTaskForm()
-
     context = {
         'posts_in_course': posts_in_course,
         'post': post,
-        'form': form,
     }
     return render(request, 'specific_post.html', context)
+
+
+class ShowSpecificTest(CreateView):
+    form_class = AnswerForm
+    template_name = 'specific_test.html'
+    extra_context = {'title': 'Тест'}
+
+    def form_valid(self, form):
+        fs = form.save(commit=False)
+        fs.quiz_id = Quiz.objects.get(pk=self.kwargs['test_id']).id
+        fs.user_id = self.request.user.id
+        fs.save()
+        return HttpResponseRedirect(reverse('show_posts', args=[fs.quiz_id.id]))
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['course'] = Courses.objects.get(pk=self.kwargs['pk'])
+        context['test'] = Quiz.objects.get(pk=self.kwargs['test_id'])
+        return context
 
 
 class CreateCourse(CreateView):
@@ -184,7 +232,7 @@ class CreatePost(CreateView):
         fs = form.save(commit=False)
         fs.course_id = self.kwargs['course_id']
         fs.save()
-        return redirect('teaching')
+        return HttpResponseRedirect(reverse('show_posts', args=[fs.course_id]))
 
 
 def delete_post(request, pk, post_id):
@@ -194,3 +242,13 @@ def delete_post(request, pk, post_id):
     return HttpResponseRedirect(reverse('teaching'))
 
 
+class CreateTest(CreateView):
+    form_class = CreateTestForm
+    template_name = 'create_quiz.html'
+    extra_context = {'title': 'Создание теста'}
+
+    def form_valid(self, form):
+        fs = form.save(commit=False)
+        fs.course_id = self.kwargs['pk']
+        fs.save()
+        return HttpResponseRedirect(reverse('show_posts', args=[fs.course_id]))

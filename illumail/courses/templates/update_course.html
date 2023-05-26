@@ -19,6 +19,18 @@
         <div class="row">
             <span id="output"></span>
         </div>
+        <label>Тип курса</label><br>
+
+        <input type="radio" id="public" name="type_course" value="1">
+        <label for="public">Публичный</label><br>
+
+        <br> <input type="radio" id="paid" name="type_course" value="2">
+        <label for="paid">Платный</label><br>
+        <label id="text2" hidden="true">
+            Цена (в белорусских рублях):
+            <input id="price" name="price">
+        </label>
+
         <br>
 
         <button class="btn btn-secondary">Сохранить изменения</button>

@@ -1,5 +1,5 @@
 from django import forms
-from .models import CompletedTaskModel, Courses, Posts, Comments
+from .models import *
 
 
 class ComplitedTaskForm(forms.ModelForm):
@@ -34,3 +34,18 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comments
         fields = ['comment_text', ]
+
+
+class CreateTestForm(forms.ModelForm):
+    class Meta:
+        model = Quiz
+        fields = ['title', 'question', 'true_answer']
+
+
+class AnswerForm(forms.ModelForm):
+    user_answer = forms.CharField(label='Ответ на вопрос', required=True, widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = Answer
+        fields = ['user_answer', ]

@@ -1,8 +1,10 @@
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 from courses.models import Courses
 import stripe
@@ -24,21 +26,56 @@ class CreateCheckoutSessionView(View):
             payment_method_types=['card'],
             line_items=[{
                 'price_data': {
-                    'currency': 'usd',
-                    'unit_amount': course.price,
+                    'currency': 'byn',
+                    'unit_amount': course.price*100,
                     'product_data': {
                         'name': course.title,
+                        'description': f"{course.about_the_course} Автор курса: {str(course.author)} ({str(course.author.last_name)} {str(course.author.first_name)} {str(course.author.patronymic)})",
+                        # 'images': [f"http://127.0.0.1:8000/{course.course_photo.url}"]
                         },
                     },
                 'quantity': 1,
                 },
             ],
+            phone_number_collection={
+                'enabled': True,
+            },
             metadata={
                 "course_id": course.id
             },
             mode='payment',
-            success_url='http://127.0.0.1:8000/course/payment/success/',
-            cancel_url='http://127.0.0.1:8000/course/payment/cancel/',
+            success_url=f'http://127.0.0.1:8000/course/payment/success/',
+            cancel_url=f'http://127.0.0.1:8000/course/payment/cancel/',
             )
-
         return redirect(checkout_session.url, code=303)
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class StripeWebhookView(View):
+    def post(self, request, format=None):
+        payload = request.body
+        endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
+        sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
+        event = None
+
+        try:
+            event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
+            print('allls')
+        except ValueError as e:
+            # Invalid payload
+            return HttpResponse(status=400)
+        except stripe.error.SignatureVerificationError as e:
+            # Invalid signature
+            return HttpResponse(status=400)
+
+        if event["type"] == "checkout.session.completed":
+            print("Payment successful")
+
+            # Add this
+            session = event["data"]["object"]
+            course = session["metadata"]["course_id"]
+
+
+        # Can handle other events here.
+
+        return HttpResponse(status=200)

@@ -3,6 +3,26 @@
 {% block content %}
 <div class="container">
     <h3 align="center">{{ subtitle }}</h3>
+
+    <div class="sorted-list">
+    <form action="{% url 'sort_courses' %}" method="get"> Сортировка:
+        <input type="radio" name="sort" value="cheap" style="margin-left: 5px"> Сначала дешевле
+        <input type="radio" name="sort" value="expensive" style="margin-left: 5px"> Сначала дорогие
+        <input type="radio" name="sort" value="new" style="margin-left: 5px"> Самые новые
+        <input type="radio" name="sort" value="old" style="margin-left: 5px"> Самые старые
+        <button class="btn btn-secondary" type='submit' style="margin-left: 5px">Применить</button>
+    </form>
+</div>
+
+     <div class="filtered-list">
+    <form action="{% url 'filter_courses' %}" method="get"> Фильтрация:
+        <input type="radio" name="filter" value="free" style="margin-left: 5px"> Бесплатные
+        <input type="radio" name="filter" value="payment" style="margin-left: 5px"> Платные
+        <button class="btn btn-secondary" type='submit' style="margin-left: 5px">Применить</button>
+    </form>
+</div>
+    <br>
+
     {% for c in courses %}
     <div class="card" style="width: 21rem; display: inline-block; margin-right: 30px; margin-bottom: 30px;">
         <div class="card-header">
@@ -27,8 +47,8 @@
     <hr>
     <h3>Категории:</h3>
     {% for cats in categories %}
-    <a class="btn btn-secondary" href="{{ cats.get_absolute_url }}">{{ cats.title }}</a>
+    <a class="btn btn-secondary" style="margin-right: 3%; margin-bottom: 2%; width: 185px; height: 100px; display: inline-flex; align-items: center; justify-content: center;" href="{{ cats.get_absolute_url }}"> {{ cats.title }}</a>
     {% endfor %}
-    <br><br>
+    <br><br><br>
 </div>
 {% endblock %}

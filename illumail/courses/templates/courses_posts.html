@@ -21,12 +21,13 @@
     {% if request.user == course.author %}
     <a class="btn btn-secondary" href="{% url 'update_course' course.id %}">Изменить курс</a>
     <a class="btn btn-secondary" href="{% url 'delete_course' course.id %}">Удалить курс</a>
-    <a class="btn btn-secondary" href="{% url 'create_post' course.id %}">Добавить задание</a>
+    <a class="btn btn-secondary" href="{% url 'create_post' course.id %}">Добавить лекцию</a>
+    <a class="btn btn-secondary" href="{% url 'create_test' course.id %}">Добавить тест</a>
     {% endif %}
     <br><br>
     <h5>О курсе: {{ course.about_the_course|linebreaks }}</h5>
-
-
+{% if posts %}
+    <h4 align="center">Лекции:</h4>
     {% for p in posts %}
     <div class="card">
         <div class="card-body">
@@ -38,6 +39,21 @@
     </div>
     <br>
     {% endfor %}
+{% endif %}
+    <hr>
+    <h4 align="center">Практика:</h4>
+    {% for t in tests %}
+    <div class="card">
+        <div class="card-body">
+        <h3>{{ t.title }}</h3>
+        <h6>Дата создания: {{ t.time_created }} |
+        Дата изменения: {{ t.time_updated }}</h6>
+        </div>
+        <a class="btn btn-secondary" href="{% url 'show_specific_test' t.course.pk t.id %}">Подробнее</a>
+    </div>
+    <br>
+    {% endfor %}
+
 
     <hr>
     <h3 align="center">Комментарии: {{ count_comments }}</h3>
