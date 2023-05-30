@@ -2,12 +2,13 @@
 {% load static %}
 
 {% block content %}
+<div class="container">
 <form method="post" enctype="multipart/form-data" autocomplete="off">
-    <div class="container">
         {% csrf_token %}
 
         <p>Название курса: {{ form.title }}<p>
         <p>Описание курса: {{ form.about_the_course }}</p>
+        <p>Категория курса: {{ form.category }} </p>
         <p>Изображение курса на данный момент:</p>
         <p><img src="{{ course.course_photo.url }}" alt="" width="350"></p>
 
@@ -21,7 +22,7 @@
         </div>
         <label>Тип курса</label><br>
 
-        <input type="radio" id="public" name="type_course" value="1">
+        <input type="radio" id="public" name="type_course" value="1" checked>
         <label for="public">Публичный</label><br>
 
         <br> <input type="radio" id="paid" name="type_course" value="2">
@@ -35,9 +36,9 @@
 
         <button class="btn btn-secondary">Сохранить изменения</button>
         <br> <br>
-    </div>
-</form>
 
+</form>
+</div>
 {% block javascript %}
 <script src="{% static 'courses/js/script.js' %}"></script>
 {% endblock %}

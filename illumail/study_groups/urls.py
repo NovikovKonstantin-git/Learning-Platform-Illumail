@@ -15,4 +15,5 @@ urlpatterns = [
     path('study_group/<int:pk>/posts/<int:post_id>/grades/<int:work_id>/', save_update_valuations, name='save_update_valuations'),
     path('study_group/<int:pk>/posts/leave_the_group/', leave_the_group, name='leave_the_group'),
     path('study_group/join_the_group', join_the_group, name='join_the_group'),
+    path('study_group/<int:group_id>/my_valuations/', MyValuations.as_view(), name='my_valuations'),
 ]

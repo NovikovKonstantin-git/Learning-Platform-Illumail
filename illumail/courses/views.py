@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
@@ -15,16 +16,13 @@ class ShowCourses(ListView):
     template_name = 'courses.html'
     context_object_name = 'courses'
     extra_context = {'title': 'Курсы', 'subtitle': 'Все курсы'}
+    paginate_by = 2
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['courses'] = Courses.objects.all()
         context['categories'] = Category.objects.all()
         context['sort'] = self.request.GET.get('sort')
-        if context['sort'] == ('new'):
-            return Courses.objects.order_by('-time_created')
-        if context['sort'] == ('old'):
-            return Courses.objects.order_by('time_created')
         return context
 
 
@@ -32,6 +30,7 @@ class SortCourses(ListView):
     model = Courses
     template_name = 'courses.html'
     context_object_name = 'courses'
+    extra_context = {'title': 'Курсы', 'subtitle': 'Курсы'}
 
     def get_queryset(self):
         sort = self.request.GET.get('sort')
@@ -42,7 +41,7 @@ class SortCourses(ListView):
         if sort == 'cheap':
             return Courses.objects.order_by('type_course')
         if sort == 'expensive':
-            return Courses.objects.order_by('-type_course', '-time_created')
+            return Courses.objects.order_by('-type_course')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -60,7 +59,7 @@ class FilterCourses(ListView):
         if filtration == 'free':
             return Courses.objects.filter(type_course='1').order_by('-time_created')
         if filtration == 'payment':
-            return Courses.objects.filter(type_course='2').order_by('-time_created')
+            return Courses.objects.filter(type_course='2').order_by('type_course')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -153,7 +152,7 @@ class UpdateCourse(UpdateView):
         fs = form.save(commit=False)
         fs.author = self.request.user
         fs.save()
-        return redirect('show_courses')
+        return HttpResponseRedirect(reverse('show_posts', args=[self.kwargs['pk']]))
 
 
 def delete_course(request, pk):

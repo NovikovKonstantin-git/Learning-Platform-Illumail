@@ -11,7 +11,7 @@
             {% if course.type_course == '1' %}
                 <a class="btn btn-secondary" href="{% url 'join_the_course' course.id %}">Вступить</a>
             {% else %}
-                <a class="btn btn-outline-secondary" href="{% url 'payment' course.pk %}">Купить</a>
+                <a class="btn btn-secondary" href="{% url 'payment' course.pk %}">Купить</a>
             {% endif %}
         {% endif %}
     {% else %}
@@ -40,6 +40,8 @@
     <br>
     {% endfor %}
 {% endif %}
+
+    {% if tests %}
     <hr>
     <h4 align="center">Практика:</h4>
     {% for t in tests %}
@@ -53,7 +55,7 @@
     </div>
     <br>
     {% endfor %}
-
+{% endif %}
 
     <hr>
     <h3 align="center">Комментарии: {{ count_comments }}</h3>

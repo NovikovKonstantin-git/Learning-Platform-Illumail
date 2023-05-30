@@ -139,6 +139,21 @@ class ShowValuations(CreateView):
         return context
 
 
+class MyValuations(ListView):
+    model = Valuation
+    template_name = 'my_valuations.html'
+    extra_context = {'title': 'Мои оценки', 'subtitle': 'Мои оценки'}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['my_valuations'] = CompletedTaskInStudyGroup.objects.filter(post_id__in=PostsInStudyGroup.objects.filter(study_group_id=self.kwargs['group_id']), user=self.request.user.id)
+        try:
+            context['avg_grade'] = sum([i.grade for i in context['my_valuations']]) / len(context['my_valuations'])
+        except ZeroDivisionError:
+            context['avg_grade'] = 'Отсутствует. У Вас нет оценок.'
+        return context
+
+
 def show_valuations(request, pk, post_id):
     study_group = StudyGroup.objects.get(pk=pk)
     compl_works = CompletedTaskInStudyGroup.objects.filter(post_id=PostsInStudyGroup.objects.get(pk=post_id))
