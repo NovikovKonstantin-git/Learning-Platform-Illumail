@@ -11,7 +11,7 @@ from .models import CustomUser
 class RegisterNewUser(CreateView):
     form_class = RegisterUser
     template_name = 'register.html'
-    extra_context = {'title': 'Регистрация'}
+    extra_context = {'title': 'Регистрация', 'subtitle': 'Регистрация'}
 
     def form_valid(self, form):
         user = form.save()
@@ -78,6 +78,10 @@ class AnotherUser(DetailView):
         context = super().get_context_data(**kwargs)
         context['another_user'] = CustomUser.objects.get(pk=self.kwargs['pk'])
         context['another_user_courses'] = CustomUser.objects.get(pk=self.kwargs['pk']).user_courses.all()
+        if CustomUser.objects.get(pk=self.kwargs['pk']).id < self.request.user.id: #61 16
+            context['r_name'] = str(CustomUser.objects.get(pk=self.kwargs['pk']).id) + "_" + str(self.request.user.id) #61_16
+        else:
+            context['r_name'] = str(self.request.user.id) + "_" + str(CustomUser.objects.get(pk=self.kwargs['pk']).id) # 61_16
 
         # чтобы появлялась кнопка подписаться/отписаться
         context['is_followed'] = False

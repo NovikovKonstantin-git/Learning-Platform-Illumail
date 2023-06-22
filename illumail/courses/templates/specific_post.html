@@ -7,7 +7,7 @@
         {% endif %}
 
     <div class="row">
-        <div class="card" style="width: 35rem; display: inline-block;">
+        <div class="card" style="display: inline-block;">
             <h3 class="card-header" align="center">{{ post.title }}</h3>
             Курс: {{ post.course }} <br>
             {% if post.photo %}
@@ -15,7 +15,10 @@
             {% endif %}
 
             {% if post.file %}
-            {{ post.file }} <br>
+            <object data="data/test.pdf" type="application/docx" width="300" height="200">
+                        <a href="{{ post.file.url }}">{{ post.file }}</a>
+                    </object>
+            <br>
             {% endif %}
 
             {% if post.post_text %}

@@ -3,7 +3,8 @@ from .models import *
 
 
 class ComplitedTaskForm(forms.ModelForm):
-    file = forms.FileField(label='Файл', widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    # file = forms.FileField(label='Файл', widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    file = forms.FileField(label='Файл')
 
     class Meta:
         model = CompletedTaskModel
@@ -12,19 +13,18 @@ class ComplitedTaskForm(forms.ModelForm):
 
 class CreateOrUpdateCourseForm(forms.ModelForm):
     about_the_course = forms.CharField(widget=forms.Textarea(attrs={'cols': 85, 'rows': 15}))
-    type_course = forms.ChoiceField(choices=Courses.CHOICES, widget=forms.RadioSelect(), required=True)
 
     class Meta:
         model = Courses
-        fields = ['title', 'course_photo', 'about_the_course', 'category', 'type_course', 'price']
+        fields = ['title', 'course_photo', 'about_the_course', 'category', 'price']
 
 
 class CreateOrUpdatePostForm(forms.ModelForm):
-    post_type = forms.ChoiceField(choices=Posts.CHOICES, widget=forms.RadioSelect(), required=True, label='Тип задания')
+    # post_type = forms.ChoiceField(choices=Posts.CHOICES, widget=forms.RadioSelect(), required=True, label='Тип задания')
 
     class Meta:
         model = Posts
-        fields = ['title', 'photo', 'file', 'post_text', 'post_type']
+        fields = ['title', 'photo', 'file', 'post_text']
 
 
 class CommentForm(forms.ModelForm):
@@ -37,6 +37,13 @@ class CommentForm(forms.ModelForm):
 
 
 class CreateTestForm(forms.ModelForm):
+    title = forms.CharField(label='Название теста', required=True, widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    question = forms.CharField(label='Вопрос', required=True, widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    true_answer = forms.CharField(label='Правильный ответ', required=True, widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+
     class Meta:
         model = Quiz
         fields = ['title', 'question', 'true_answer']
@@ -48,4 +55,34 @@ class AnswerForm(forms.ModelForm):
 
     class Meta:
         model = Answer
+        fields = ['user_answer', ]
+
+
+class TestingForm(forms.ModelForm):
+    class Meta:
+        model = Testing
+        fields = ['name', 'description']
+
+
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['text']
+
+
+class ReplyForm(forms.ModelForm):
+    class Meta:
+        model = Reply
+        fields = ['text', 'is_correct']
+
+
+"""Новое"""
+
+
+class GoodAnswerForm(forms.ModelForm):
+    user_answer = forms.CharField(label='Ответ на вопрос', required=True, widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = AnswerModel
         fields = ['user_answer', ]

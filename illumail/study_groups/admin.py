@@ -20,13 +20,6 @@ class ComplitedTaskInStudyGroupAdmin(admin.ModelAdmin):
     search_fields = ('user', )
 
 
-class ValuationAdmin(admin.ModelAdmin):
-    list_display = ('user', 'post_task', 'compl_task', 'grade', 'valuation_date')
-    list_filter = ('user', 'grade', 'valuation_date')
-    search_fields = ('user', )
-
-
 admin.site.register(StudyGroup, StudyGroupAdmin)
 admin.site.register(PostsInStudyGroup, PostsInStudyGroupAdmin)
 admin.site.register(CompletedTaskInStudyGroup, ComplitedTaskInStudyGroupAdmin)
-admin.site.register(Valuation, ValuationAdmin)

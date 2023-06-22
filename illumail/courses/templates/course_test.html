@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    {% for q in questions %}
+    <div class="card">
+        <div class="card-body">
+        <h3>{{ q.question }}</h3>
+            </div>
+    </div>
+    <br>
+
+    <form method="post" autocomplete="off" action="{% url 'save_user_answer' q.test.course.pk q.pk %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-secondary">Сдать тест</button>
+        <br>
+        <br>
+    {% endfor %}
+
+    </form>
+</div>
+{% endblock %}
+

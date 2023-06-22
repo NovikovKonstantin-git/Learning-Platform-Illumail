@@ -5,7 +5,8 @@ from .models import CompletedTaskInStudyGroup, StudyGroup, PostsInStudyGroup
 
 
 class ComplitedTaskGroupForm(forms.ModelForm):
-    file = forms.FileField(label='Файл', widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    #file = forms.FileField(label='Файл', widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    file = forms.FileField(label='Файл')
 
     class Meta:
         model = CompletedTaskInStudyGroup

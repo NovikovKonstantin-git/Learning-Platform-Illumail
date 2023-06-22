@@ -16,6 +16,9 @@
             {% endif %}
 
             {% if post.file %}
+        <object data="data/test.pdf" type="application/docx" width="300" height="200">
+                        <a href="{{ post.file.url }}">Документ: {{ post.file }}</a>
+            </object>
             {{ post.file }} <br>
             {% endif %}
 

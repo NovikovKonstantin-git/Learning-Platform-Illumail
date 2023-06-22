@@ -20,6 +20,7 @@
     {% if another_user.username != request.user.username %}
     {% if is_followed %}
     <a class="btn btn-secondary" href="{% url 'unsubscribe' another_user.pk %}">Отписаться</a>
+    <a class="btn btn-outline-secondary" href="{% url 'room' r_name %}">Написать сообщение</a>
     {% else %}
     <a class="btn btn-secondary" href="{% url 'add_subscription' another_user.pk %}">Подписаться</a>
     {% endif %}

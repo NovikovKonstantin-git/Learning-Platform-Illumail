@@ -14,7 +14,11 @@
             </h5>
             <h5>Учащийся: {{ cw.user.last_name }} {{ cw.user.first_name }} {{ cw.user.patronymic }} ({{ cw.user }})</h5>
             <h5>Задание: {{ cw.post }}</h5>
-            <h5>Выполненное задание: {{ cw.file }}</h5>
+            <h5>Выполненное задание:
+                <object data="data/test.pdf" type="application/docx" width="300" height="200">
+                        <a href="{{ cw.file.url }}">{{ cw.file }}</a>
+                    </object>
+            </h5>
             <h5>Оценка: {{ cw.grade }}</h5>
             <h5>Дата сдачи работы: {{ cw.time_load }}</h5>
         </div>

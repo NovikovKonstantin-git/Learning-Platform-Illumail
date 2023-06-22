@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    {{ test_form.as_p }}
+    <input type="number" name="question_count" value="5">
+    <input type="number" name="answer_count" value="4">
+    {% for qform in question_forms %}
+        {{ qform.as_p }}
+        {% for aform in answer_forms %}
+            {% if aform.prefix == qform.prefix %}
+                {{ aform.as_p }}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    <button type="submit">Create Test</button>
+</form>
+
+{% endblock %}

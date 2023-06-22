@@ -2,6 +2,7 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
+    path('', redirectik, name='redirectik'),
     path('courses/', ShowCourses.as_view(), name='show_courses'),
     path('courses/<int:course_id>/posts/', ShowPosts.as_view(), name='show_posts'),
     path('courses/<int:course_id>/posts/<int:post_id>/', show_specific_post, name='show_specific_post'),
@@ -21,4 +22,9 @@ urlpatterns = [
     path('courses/<int:pk>/posts/test/<int:test_id>/', ShowSpecificTest.as_view(), name='show_specific_test'),
     path('courses/sort/', SortCourses.as_view(), name='sort_courses'),
     path('courses/filter/', FilterCourses.as_view(), name='filter_courses'),
+    path('courses/new_test/', create_test, name='new_test'),
+
+    path('course/<int:course_id>/test/<int:pk>/', GoodTest.as_view(), name='good_test'),
+    # path('course/<int:course_id>/test/<int:pk>/questions/<int:question_id>/save/', save_user_answer, name='save_user_answer'),
+    path('course/<int:pk>/test/questions/<int:question_id>/save/', save_user_answer, name='save_user_answer'),
 ]

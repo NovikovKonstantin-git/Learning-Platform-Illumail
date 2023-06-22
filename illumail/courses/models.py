@@ -10,6 +10,7 @@ class Courses(models.Model):
         ('2', 'Платный'),
     ]
 
+
     title = models.CharField(max_length=300, verbose_name='Название')
     course_photo = models.ImageField(upload_to='courses_headers/%Y/%m/%d', default='dflt_crs_hdrs.jpg', verbose_name='Изображение курса')
     about_the_course = models.TextField(verbose_name='О курсе')
@@ -19,6 +20,8 @@ class Courses(models.Model):
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категория')
     type_course = models.CharField(max_length=200, choices=CHOICES, default='1', verbose_name='Тип курса')
     price = models.IntegerField(verbose_name='Цена', blank=True, null=True)
+
+
 
     def get_absolute_url(self):
         return reverse('show_posts', kwargs={'course_id': self.id})
@@ -130,3 +133,70 @@ class Answer(models.Model):
     class Meta:
         verbose_name = 'Ответ на тест в вписыванем'
         verbose_name_plural = 'Ответы на тест в вписыванем'
+
+
+class Testing(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+
+
+class Question(models.Model):
+    test = models.ForeignKey(Testing, on_delete=models.CASCADE)
+    text = models.TextField()
+
+
+class Reply(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    text = models.TextField()
+    is_correct = models.BooleanField(default=False)
+
+
+class GoodTestModel(models.Model):
+    title = models.CharField(max_length=300, verbose_name='Название теста')
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE, verbose_name='Курс')
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Тест'
+        verbose_name_plural = 'Тесты'
+
+
+class QuestionModel(models.Model):
+    test = models.ForeignKey(GoodTestModel, on_delete=models.CASCADE, verbose_name='Название теста')
+    question = models.CharField(max_length=500, verbose_name='Вопрос')
+    true_answer = models.CharField(max_length=500, verbose_name='Правильный ответ')
+
+    def __str__(self):
+        return self.question
+
+    class Meta:
+        verbose_name = 'Вопрос'
+        verbose_name_plural = 'Вопросы'
+
+
+class AnswerModel(models.Model):
+    question = models.ForeignKey(QuestionModel, on_delete=models.CASCADE, verbose_name='Вопрос')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Пользователь')
+    user_answer = models.CharField(max_length=300, verbose_name='Ответ пользователя')
+
+    def __str__(self):
+        return f"{self.question}"
+
+    class Meta:
+        verbose_name = 'Ответ на тест'
+        verbose_name_plural = 'Ответы на тест'
+
+
+class Progress(models.Model):
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE, verbose_name='Курс')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Пользователь')
+    progress = models.IntegerField(validators=[MaxValueValidator(limit_value=100), ], default=0, verbose_name='Прогресс')
+
+    def __str__(self):
+        return f"{self.progress}"
+
+    class Meta:
+        verbose_name = 'Прогресс'
+        verbose_name_plural = 'Прогресс'

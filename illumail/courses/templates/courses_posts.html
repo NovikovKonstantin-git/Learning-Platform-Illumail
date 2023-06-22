@@ -2,8 +2,23 @@
 
 {% block content %}
 <div class="container">
+    {% if messages %}
+
+    {% for message in messages %}
+    <div class="alert alert-dark alert-dismissible fade show" role="alert">
+    {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+
     {% if request.user.is_authenticated %}
         {% if is_followed %}
+    {% if tasks %}
+
+    <h3>Прогресс: {{ progress }} / {{ tasks }}</h3>
+    {% endif %}
             <a class="btn btn-secondary" href="{% url 'leave_the_course' course.id %}">Покинуть</a>
         {% elif request.user == course.author %}
 
@@ -44,6 +59,7 @@
     {% if tests %}
     <hr>
     <h4 align="center">Практика:</h4>
+    <h4>Вступите, чтобы просматривать и выполнять задания</h4>
     {% for t in tests %}
     <div class="card">
         <div class="card-body">
@@ -51,11 +67,30 @@
         <h6>Дата создания: {{ t.time_created }} |
         Дата изменения: {{ t.time_updated }}</h6>
         </div>
+
+            {% if is_followed %}
         <a class="btn btn-secondary" href="{% url 'show_specific_test' t.course.pk t.id %}">Подробнее</a>
+        {% endif %}
+
+
     </div>
     <br>
     {% endfor %}
 {% endif %}
+
+<!--     {% if good_tests %}-->
+<!--    <hr>-->
+<!--    <h4 align="center">Практика:</h4>-->
+<!--    {% for gt in good_tests %}-->
+<!--    <div class="card">-->
+<!--        <div class="card-body">-->
+<!--        <h3>{{ gt.title }}</h3>-->
+<!--        </div>-->
+<!--        <a class="btn btn-secondary" href="{% url 'good_test' gt.course.pk gt.pk %}">Пройти тест</a>-->
+<!--    </div>-->
+<!--    <br>-->
+<!--    {% endfor %}-->
+<!--{% endif %}-->
 
     <hr>
     <h3 align="center">Комментарии: {{ count_comments }}</h3>

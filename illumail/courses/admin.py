@@ -39,6 +39,17 @@ class AnswerAdmin(admin.ModelAdmin):
     list_display = ('quiz', 'user', 'user_answer')
 
 
+"""Новое"""
+
+
+class GoodTestAdmin(admin.ModelAdmin):
+    list_display = ('title', 'course')
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ('question', 'test')
+
+
 admin.site.register(Courses, CoursesAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Posts, PostsAdmin)
@@ -46,3 +57,8 @@ admin.site.register(CompletedTaskModel, ComplitedTaskModelAdmin)
 admin.site.register(Comments, CommentsAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Answer, AnswerAdmin)
+admin.site.register(Progress)
+
+# admin.site.register(GoodTestModel, GoodTestAdmin)
+# admin.site.register(QuestionModel, QuestionAdmin)
+# admin.site.register(AnswerModel)

@@ -15,6 +15,7 @@
             <h6>Дата создания: {{ u_c.time_created }}</h6>
             <h6>Дата изменения: {{ u_c.time_updated }}</h6>
             <h6>Автор: {{ u_c.author }} ({{ u_c.author.first_name }})</h6>
+
         <div class="d-grid gap-2">
             <a class="btn btn-secondary" href="{{ u_c.get_absolute_url }}">Продолжить обучение</a>
         </div>
