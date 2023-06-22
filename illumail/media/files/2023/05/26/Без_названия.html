@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информция</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+
+<br>
+<div class="container">
+<!--    <a class="btn btn-outline-secondary" href="#">Чаты</a>-->
+    <!--    <a class="btn btn-outline-secondary" href="#">Тесты</a>-->
+    <a class="btn btn-outline-secondary" href="/courses/">Illumail</a>
+    <a class="btn btn-secondary" href="/news/">Новости</a>
+    <a class="btn btn-secondary" href="/courses/">Каталог</a>
+
+    <form action="/courses/search/" method="get" class="form-inline"
+          style="display: inline-block; float:right;">
+        <input autocomplete="off" type="search" placeholder="Поиск курса"
+               aria-label="Search" name="search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Искать</button>
+    </form>
+
+    
+    <a class="btn btn-secondary" href="/my_profile/1/">Мой профиль</a>
+    <a class="btn btn-secondary" href="/learning/">Обучение</a>
+    <a class="btn btn-secondary" href="/courses/teaching/">Преподавание</a>
+    <hr>
+
+    
+</div>
+
+<div class="container">
+    
+        
+
+        
+    
+
+    
+    <a class="btn btn-secondary" href="/courses/14/update/">Изменить курс</a>
+    <a class="btn btn-secondary" href="/courses/14/delete/">Удалить курс</a>
+    <a class="btn btn-secondary" href="/courses/14/posts/create/">Добавить лекцию</a>
+    <a class="btn btn-secondary" href="/courses/14/posts/create_test/">Добавить тест</a>
+    
+    <br><br>
+    <h5>О курсе: <p>Django — это фреймворк, написанный на Python, предназначенный для быстрого создания приложений. Данная платформа была разработана командой опытных практиков, чтобы избавить программистов от необходимости писать сотни строк кода, но при этом быстро создавать функциональные продукты. Преимуществами Django являются скорость, безопасность и масштабируемость. А еще:</p>
+
+<p>• Открытый код — вы можете легко вносить изменения, добавлять и обновлять функциональные возможности framework.</p>
+
+<p>• Модель MVC — инструмент позволяет разделить модели, представления и бизнес-логику приложения.• Объектно-реляционное отображение (ORM) — позволяет писать модели целиком на Python.</p>
+
+<p>• Обладает богатым, динамичным базовым интерфейсом. При желании вы также можете использовать чистый SQL.</p></h5>
+
+
+    
+
+    
+    <div class="card">
+        <div class="card-body">
+        <h3>sjsj</h3>
+        <h6>Дата создания: 26 мая 2023 г. 1:53 |
+        Дата изменения: 26 мая 2023 г. 1:53</h6>
+        </div>
+        <a class="btn btn-secondary" href="">Подробнее</a>
+    </div>
+    <br>
+    
+
+
+    <hr>
+    <h3 align="center">Комментарии: 0</h3>
+    
+        <form method="post" autocomplete="off">
+            <input type="hidden" name="csrfmiddlewaretoken" value="QDDGCM58Gjry2G7yFEH6GkEmZeJaOEyWbjqbfVoYHyifz6Cw1pXRu7Hd09Blm2OH">
+            <p>
+    <label for="id_comment_text">Текст комментария:</label>
+    <input type="text" name="comment_text" class="form-control" required id="id_comment_text">
+    
+    
+      
+    
+  </p>
+            <button class="btn btn-secondary">Добавить</button>
+        </form>
+        <br>
+    
+
+    <br><br>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+</body>
+</html>
