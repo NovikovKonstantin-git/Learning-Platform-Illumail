@@ -59,7 +59,7 @@
     <a class="teaching_button" href="{% url 'create_test' course.id %}">Добавить тест</a>
     {% endif %}
 
-    <a class="" href="{{ course.author }}" style="text-decoration: none; width: 100%;">
+    <a class="" href="{% url 'another_user' course.author.pk %}" style="text-decoration: none; width: 100%;">
         <h2 align="center" style="width: 100%; color: white; margin-top: 10px;">Автор: {{ course.author.last_name }} {{ course.author.first_name }} {{ course.author.patronymic }}</h2>
     </a>
 
