@@ -17,7 +17,7 @@ class ShowCourses(ListView):
     template_name = 'courses.html'
     context_object_name = 'courses'
     extra_context = {'title': 'Курсы', 'subtitle': 'Все курсы'}
-    paginate_by = 3
+    paginate_by = 6
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -170,6 +170,12 @@ class CreateCourse(CreateView):
         fs.author = self.request.user
         fs.save()
         return redirect('show_courses')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cats'] = Category.objects.all()
+        return context
+
 
 
 class UpdateCourse(UpdateView):

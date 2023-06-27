@@ -1,24 +1,47 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
 
-{% block content %}
-<div class="container">
-    <h3 align="center">{{ subtitle }}</h3>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+
+</head>
+<body>
+
+
+<section class="container" style="word-wrap: break-word; width: 100%;">
+
+    {% include 'nav.html' %}
+
+
+    <h2 align="center" style="color: white; width: 100%; margin-top: 30px;">{{ subtitle }}</h2>
     {% for c in courses %}
-    <div class="card" style="width: 21rem; display: inline-block; margin-right: 30px; margin-bottom: 30px;">
-        <div class="card-header">
-            <h3 align="center">{{ c.title }}</h3>
-        </div>
-        {% if c.course_photo %}
-        <img src="{{ c.course_photo.url }}" class="card-img-top" alt="" height="175"> <br>
-        {% endif %}
-        Дата создания: {{ c.time_created }} <br>
-        Дата изменения: {{ c.time_updated }} <br>
-        Автор: {{ c.author }} ({{ c.author.first_name }}) <br>
-        <div class="d-grid gap-2">
-            <a class="btn btn-secondary" href="{{ c.get_absolute_url }}">Подробнее</a>
+    <div class="card">
+        <div class="content">
+            <h2>{{ c.title }}</h2>
+            <h3>{{ c.title }}</h3><br>
+            <p>Дата создания: {{ c.time_created }}<br><br>
+            Дата изменения: {{ c.time_updated }}<br>
+            Автор: {{ c.author }} ({{ c.author.first_name }})<br>
+            </p>
+            <a href="{{ c.get_absolute_url }}">Подробнее</a>
         </div>
     </div>
     {% endfor %}
-    <br><br>
-</div>
-{% endblock %}
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+		max: 25,
+		speed: 400,
+		glare: true,
+		"max-glare": 1,
+	});
+</script>
+</html>

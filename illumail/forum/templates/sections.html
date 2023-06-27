@@ -1,21 +1,104 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
 
-{% block content %}
-<div class="container">
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+</head>
+<body>
+
+
+<section class="container" style="word-wrap: break-word; width: 100%;">
+
+    {% include 'nav.html' %}
+
     {% if request.user.is_authenticated %}
-        <form method="post" autocomplete="off">
-            {% csrf_token %}
-            <h5>Создать раздел: {{ form.as_p }}</h5>
-            <button class="btn btn-secondary">Добавить</button>
-        </form>
-        <br>
+
+    <h2 align="center" style="width: 100%; color: white; margin-top: 30px;">Добавить раздел:</h2>
+
+    <form method="post" style="width: 100%; margin-bottom: 10px;" autocomplete="off">
+        {% csrf_token %}
+        <section class="form-section">
+            <div class="form-box">
+                <div class="form-value">
+                    <div class="inputbox">
+                        <input name="section" class="" required>
+                        <label>Введите название</label>
+                    </div>
+                    <button class="form-button" type="submit">Добавить</button>
+                </div>
+            </div>
+        </section>
+    </form>
+
     {% else %}
         <h5><i>Авторизуйтесь, чтобы создать раздел</i></h5>
     {% endif %}
-    <h3 align="center">Разделы:</h3>
+
+    <h2 align="center" style="width: 100%; color: white; margin-top: 25px;">Все разделы:</h2>
+
     {% for s in sections %}
-        <h3>{{ s }}</h3>
-        <a class="btn btn-secondary" href="{% url 'show_subsections' s.pk %}">Подробнее</a>
+    <div class="card" style="height: 220px;">
+        <div class="content">
+            <h2>{{ s}}</h2>
+            <h3>{{ s }}</h3><br>
+            <a href="{% url 'show_subsections' s.pk %}">Подробнее</a>
+        </div>
+    </div>
     {% endfor %}
-</div>
-{% endblock %}
+
+
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+		max: 25,
+		speed: 400,
+		glare: true,
+		"max-glare": 1,
+	});
+	const menuHamburger = document.querySelector(".menu-hamburger")
+        const navLinks = document.querySelector(".nav-links")
+
+        menuHamburger.addEventListener('click',()=>{
+        navLinks.classList.toggle('mobile-menu')
+        })
+
+const button = document.querySelector("button"),
+      toast = document.querySelector(".toast")
+      closeIcon = document.querySelector(".close"),
+      progress = document.querySelector(".progress");
+      let timer1, timer2;
+      button.addEventListener("click", () => {
+        toast.classList.add("active");
+        progress.classList.add("active");
+        timer1 = setTimeout(() => {
+            toast.classList.remove("active");
+        }, 5000); //1s = 1000 milliseconds
+        timer2 = setTimeout(() => {
+          progress.classList.remove("active");
+        }, 5300);
+      });
+
+      closeIcon.addEventListener("click", () => {
+        toast.classList.remove("active");
+
+        setTimeout(() => {
+          progress.classList.remove("active");
+        }, 300);
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      });
+
+</script>
+
+
+</html>

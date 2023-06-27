@@ -1,13 +1,90 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
 
-{% block content %}
-<div class="container">
-  <h5>Название: {{ test.title }}</h5>
-  <h5>Вопрос: {{ test.question }}</h5>
-  <form method="post" autocomplete="off">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-secondary">Ответить</button>
-  </form>
-</div>
-{% endblock %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+</head>
+<body>
+
+
+<section class="container" style="word-wrap: break-word; width: 100%;">
+
+    {% include 'nav.html' %}
+
+    {% if request.user.is_authenticated %}
+
+    <h2 align="center" style="width: 100%; color: white; margin-top: 30px; padding-top: 200px;">Название: {{ test.title }}</h2>
+  <h2 align="center" style="width: 100%; color: white; margin-top: 30px;">Вопрос: {{ test.question }}</h2>
+
+    <form method="post" style="width: 100%; margin-bottom: 10px; padding-bottom: 200px;" autocomplete="off">
+        {% csrf_token %}
+        <section class="form-section">
+            <div class="form-box">
+                <div class="form-value">
+                    <div class="inputbox">
+                        <input name="user_answer" id="id_user_answer" class="" required>
+                        <label>Введите текст</label>
+                    </div>
+                    <button class="form-button" type="submit">Ответить</button>
+                </div>
+            </div>
+        </section>
+    </form>
+  {% endif %}
+
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+		max: 25,
+		speed: 400,
+		glare: true,
+		"max-glare": 1,
+	});
+	const menuHamburger = document.querySelector(".menu-hamburger")
+        const navLinks = document.querySelector(".nav-links")
+
+        menuHamburger.addEventListener('click',()=>{
+        navLinks.classList.toggle('mobile-menu')
+        })
+
+const button = document.querySelector("button"),
+      toast = document.querySelector(".toast")
+      closeIcon = document.querySelector(".close"),
+      progress = document.querySelector(".progress");
+      let timer1, timer2;
+      button.addEventListener("click", () => {
+        toast.classList.add("active");
+        progress.classList.add("active");
+        timer1 = setTimeout(() => {
+            toast.classList.remove("active");
+        }, 5000); //1s = 1000 milliseconds
+        timer2 = setTimeout(() => {
+          progress.classList.remove("active");
+        }, 5300);
+      });
+
+      closeIcon.addEventListener("click", () => {
+        toast.classList.remove("active");
+
+        setTimeout(() => {
+          progress.classList.remove("active");
+        }, 300);
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      });
+
+
+</script>
+
+
+</html>

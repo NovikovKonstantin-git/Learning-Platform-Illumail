@@ -1,41 +1,110 @@
-{% extends 'base.html' %}
 {% load static %}
+<!DOCTYPE html>
 
-{% block content %}
-<form method="post" enctype="multipart/form-data" autocomplete="off">
-    <div class="container">
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+</head>
+<body>
+
+
+<section class="container" style="word-wrap: break-word; width: 100%;">
+
+    {% include 'nav.html' %}
+
+    {% if request.user.is_authenticated %}
+
+    <h2 align="center" style="width: 100%; color: white; margin-top: 30px;">Изменение профиля:</h2>
+
+    <form method="post" style="width: 100%; margin-bottom: 10px; height: 1300px;" autocomplete="off">
         {% csrf_token %}
-        <h4>Общая информация:</h4>
-        {% if user.photo %}
-        Фото на данный момент: <br>
-        <img src="{{ user.photo.url }}" alt="" width="200" style="border-radius: 10%;"> <br>
-        {% endif %}
-        <div class="row">
-            <label>Новое фото профиля:</label>
-            <input type="file" id="id_photo" name="photo"/>
-        </div>
-        <br>
-        <div class="row">
-            <span id="output"></span>
-        </div>
-        <br>
+        <section class="form-section">
+            <div class="form-box" style="height: 1200px;">
+                <div class="form-value">
 
-        Имя: {{ form.first_name }} <br>
-        Фамилия: {{ form.last_name }} <br>
-        Отчество: {{ form.patronymic }} <br>
-        Имя пользователя: {{ form.username }} <br>
-        Эл.почта: {{ form.email }} <br>
-        О себе: {{ form.bio }} <br>
-        <hr><h4>Конфеденциальность:</h4>
-        <a class="btn btn-secondary" href="{% url 'new_password' user.id %}">Изменить пароль</a>
-        <hr>
-        <button class="btn btn-secondary">Сохранить</button>
-        <br><br><br>
-    </div>
-</form>
+                    <p style="color: white; text-align: center">Изображение профиля на данный момент:</p>
+                    <p><img src="{{ user.photo.url }}" alt="" width="250" height="300" style="margin-left: 35%;"></p>
+
+                    <div class="row" style="color: white;">
+                        <label>Новое фото профиля:</label>
+                        <input type="file" id="id_photo" name="photo"/>
+                    </div>
+                    <br>
+                    <div class="row" style="color: white;">
+                        <span id="output"></span>
+                    </div>
+
+                    <div class="inputbox">
+                        <input name="first_name" class="" required value="{{ user.first_name }}">
+                        <label>Имя</label>
+                    </div>
+                    <div class="inputbox">
+                        <input name="last_name" class="" required value="{{ user.last_name }}">
+                        <label>Фамилия</label>
+                    </div>
+                    <div class="inputbox">
+                        <input name="patronymic" class="" required value="{{ user.patronymic }}">
+                        <label>Отчество</label>
+                    </div>
+                    <div class="inputbox">
+                        <input name="username" class="" required value="{{ user.username }}">
+                        <label>Имя пользователя</label>
+                    </div>
+                    <div class="inputbox">
+                        <input name="email" class="" required value="{{ user.email }}">
+                        <label>Эл.почта</label>
+                    </div>
+                    <div class="inputbox">
+                        <input name="bio" class="" required value="{{ user.bio }}">
+                        <label>О себе</label>
+                    </div>
+
+                    <h3 align="center" style="width: 100%; color: white; margin-top: 30px;">Конфеденциальность:</h3>
+                    <a class="teaching_button" style="margin-left: 36%;" href="{% url 'new_password' user.id %}">Изменить пароль</a>
+                    <button class="teaching_button" type="submit" style="margin-left: 36%; font-size: 1em;">Сохранить изменения</button>
+                </div>
+            </div>
+        </section>
+    </form>
+
+    {% endif %}
+
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+function handleFileSelect(evt) {
+    var photo = evt.target.files;
+    var cp = photo[0];
+
+    if (!cp.type.match('image.*')) {
+        alert("Image only please....");
+    }
+    var reader = new FileReader();
+
+    reader.onload = (function(theFile) {
+        return function(e) {
+
+            var span = document.createElement('span');
+            span.innerHTML = ['<img class="thumb" width="350" title="', escape(theFile.name), '" src="', e.target.result, '" />'].join('');
+            document.getElementById('output').insertBefore(span, null);
+        };
+    })(cp);
+
+    reader.readAsDataURL(cp);
+}
+document.getElementById('id_photo').addEventListener('change', handleFileSelect, false);
+
+</script>
 
 {% block javascript %}
-<script src="{% static 'users/js/script.js' %}"></script>
+<script src="{% static 'courses/js/script.js' %}"></script>
 {% endblock %}
-
-{% endblock %}
+</html>

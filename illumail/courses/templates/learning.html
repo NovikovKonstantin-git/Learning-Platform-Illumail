@@ -1,54 +1,79 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
 
-{% block content %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
 
-<div class="container">
-    <h3 align="center">{{ subtitle }}</h3>
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+
+</head>
+<body>
+
+
+<section class="container" style="word-wrap: break-word;">
+
+    {% include 'nav.html' %}
+
+    {% if message_ok %} {% endif %}
+
+    <h2 align="center" style="color: white; width: 100%; margin-top: 30px;">{{ subtitle }}</h2>
     {% for u_c in user_courses %}
-    <div class="card" style="width: 21rem; display: inline-block; margin-right: 30px; margin-bottom: 30px;">
-        <div class="card-header">
-            <h3 align="center">{{ u_c.title }}</h3>
-        </div>
-        {% if u_c.course_photo %}
-        <img src="{{ u_c.course_photo.url }}" class="card-img-top" alt="" height="175"> <br>
-        {% endif %}
-            <h6>Дата создания: {{ u_c.time_created }}</h6>
-            <h6>Дата изменения: {{ u_c.time_updated }}</h6>
-            <h6>Автор: {{ u_c.author }} ({{ u_c.author.first_name }})</h6>
-
-        <div class="d-grid gap-2">
-            <a class="btn btn-secondary" href="{{ u_c.get_absolute_url }}">Продолжить обучение</a>
+    <div class="card">
+        <div class="content">
+            <h2>{{ u_c.title }}</h2>
+            <h3>{{ u_c.title }}</h3><br>
+            <p>Дата создания: {{ u_c.time_created }}<br><br>
+            Дата изменения: {{ u_c.time_updated }}<br>
+            Автор: {{ u_c.author }} ({{ u_c.author.first_name }})<br>
+            </p>
+            <a href="{{ u_c.get_absolute_url }}">Продолжить обучение</a>
         </div>
     </div>
     {% endfor %}
-</div>
 
-<hr>
+    <h2 align="center" style="color: white; width: 100%;">Учебные группы:</h2>
 
-<div class="container">
-    <h3 align="center">Учебные группы:</h3>
-
-    <form action="{% url 'join_the_group' %}" method="get">
-        <input autocomplete="off" type="text" placeholder="Введите код"
-               aria-label="Code" name="code">
-        <button class="btn btn-outline-secondary" type="submit">Вступить</button>
+    <form action="{% url 'join_the_group' %}" method="get" style="width: 100%; margin-bottom: 10px;">
+        <section class="form-section">
+            <div class="form-box">
+                <div class="form-value">
+                    <div class="inputbox">
+                        <input autocomplete="off" type="text"
+                               aria-label="Code" name="code" required>
+                        <label>Введите код</label>
+                    </div>
+                    <button class="form-button" type="submit">Вступить</button>
+                </div>
+            </div>
+        </section>
     </form>
 
     {% for ug in user_groups %}
-    <div class="card" style="width: 21rem; display: inline-block; margin-right: 30px; margin-bottom: 30px;">
-        <div class="card-header">
-            <h3 style="height: 6rem; text-align: center;">{{ ug.title }}</h3>
-        </div>
-        {% if ug.group_photo %}
-            <img src="{{ ug.group_photo.url }}" class="card-img-top" alt="" height="175"> <br>
-        {% endif %}
-        <h6>Дата создания: {{ ug.time_created }}</h6>
-        <h6>Дата изменения: {{ ug.time_updated }}</h6>
-        <h6>Автор: {{ ug.author }} ({{ ug.author.first_name }})</h6>
-        <div class="d-grid gap-2">
-            <a class="btn btn-secondary" href="{{ ug.get_absolute_url }}">Продолжить обучение</a>
+    <div class="card">
+        <div class="content">
+            <h2>{{ ug.title }}</h2>
+            <h3>{{ ug.title }}</h3>
+            <p>Дата создания: {{ ug.time_created }}<br><br>
+            Дата изменения: {{ ug.time_updated }}<br>
+            Автор: {{ ug.author }} ({{ ug.author.first_name }})<br>
+            </p>
+            <a href="{{ ug.get_absolute_url }}">Продолжить обучение</a>
         </div>
     </div>
     {% endfor %}
-</div>
-{% endblock %}
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+		max: 25,
+		speed: 400,
+		glare: true,
+		"max-glare": 1,
+	});
+</script>
+</html>

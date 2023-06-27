@@ -34,7 +34,7 @@ for image in images:
 
 itog = []
 for i in range(len(titles_list)):
-    itog.append(f"{titles_list[i]} <br> <img src='{image_list[i]}' height='250'> <br> <br> <a class='btn btn-secondary' href='{urls_list[i]}'>Посмотреть статью</a> <br> ")
+    itog.append(f"{titles_list[i]} <br> <img src='{image_list[i]}' height='250'> <br> <br> <a class='btn btn-secondary' href='{urls_list[i]}' style='text-decoration:none; color: white; font-weight: bold; font-size: 1.2em;' class='position: relative; display: inline-block; padding: 8px 20px; margin-top: 25px; margin-bottom: 15px; margin-right: 20px;margin-left: 20px; background: #fff; color: #000; border-radius: 20px; text-decoration: none; font-weight: 500; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); word-wrap: break-word; word-break: break-all; width: 230px; text-align: center;'>Посмотреть статью</a> <br> ")
 
 
 @register.simple_tag()

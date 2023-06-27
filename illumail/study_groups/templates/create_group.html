@@ -1,30 +1,89 @@
-{% extends 'base.html' %}
-{% load static %}
+ {% load static %}
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+</head>
+<body>
 
 
-{% block content %}
-<div class="container">
-    <form method="post" autocomplete="off" enctype="multipart/form-data">
+<section class="container" style="word-wrap: break-word; width: 100%;">
+
+    {% include 'nav.html' %}
+
+    {% if request.user.is_authenticated %}
+
+    <h2 align="center" style="width: 100%; color: white; margin-top: 30px;">Создание учебной группы:</h2>
+
+    <form method="post" style="width: 100%; margin-bottom: 10px; height: 600px;" autocomplete="off">
         {% csrf_token %}
-        Название группы: {{ form.title }} <br> <br>
-        Описание группы: {{ form.about_the_group }}
-        <div class="row">
-            <label>Фото группы:</label>
-            <input type="file" id="id_group_photo" name="group_photo"/>
-        </div>
-        <br>
-        <div class="row">
+        <section class="form-section">
+            <div class="form-box" style="height: 500px;">
+                <div class="form-value">
+                    <div class="inputbox">
+                        <input name="title" class="" required>
+                        <label>Название группы</label>
+                    </div>
+                    <div class="inputbox">
+                        <input name="about_the_group" class="" required>
+                        <label>Описание группы</label>
+                    </div>
 
-            <span id="output"></span>
-        </div>
-        <br>
 
-        <button class="btn btn-secondary">Создать</button>
+
+                    <div class="row" style="color: white;">
+                        <label>Фото группы:</label>
+                        <input type="file" id="id_group_photo" name="group_photo"/>
+                    </div>
+                    <br>
+                    <div class="row" style="color: white;">
+                        <span id="output"></span>
+                    </div>
+
+                    <button class="form-button" type="submit">Добавить</button>
+                </div>
+            </div>
+        </section>
     </form>
-</div>
+
+    {% endif %}
+
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+function handleFileSelect(evt) {
+    var group_photo = evt.target.files;
+    var cp = group_photo[0];
+
+    if (!cp.type.match('image.*')) {
+        alert("Image only please....");
+    }
+    var reader = new FileReader();
+
+    reader.onload = (function(theFile) {
+        return function(e) {
+
+            var span = document.createElement('span');
+            span.innerHTML = ['<img class="thumb" width="350" title="', escape(theFile.name), '" src="', e.target.result, '" />'].join('');
+            document.getElementById('output').insertBefore(span, null);
+        };
+    })(cp);
+
+    reader.readAsDataURL(cp);
+}
+document.getElementById('id_group_photo').addEventListener('change', handleFileSelect, false);
+</script>
 
 {% block javascript %}
-<script src="{% static 'study_groups/js/script.js' %}"></script>
+<script src="{% static 'courses/js/script.js' %}"></script>
 {% endblock %}
-
-{% endblock %}
+</html>

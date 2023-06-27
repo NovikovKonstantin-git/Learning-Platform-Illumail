@@ -1,127 +1,146 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
 
-{% block content %}
-<div class="container">
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+</head>
+<body>
+
+
+<section class="container" style="word-wrap: break-word; width: 100%;">
+
+    {% include 'nav.html' %}
+
     {% if messages %}
 
     {% for message in messages %}
-    <div class="alert alert-dark alert-dismissible fade show" role="alert">
-    {{ message }}
+
+    <div class="alert alert-dark alert-dismissible fade show" id="message2">
+        <h3 style="align:center; width: 100%; color: white; backdrop-filter: blur(15px); padding-left: 20px; padding-top: 20px;padding-right: 20px;padding-bottom: 20px; border: 2px solid rgba(255,255,255,0.5); border-radius: 20px;">
+            {{ message }}
+        </h3>
         </div>
     {% endfor %}
 {% endif %}
 
-
-
     {% if request.user.is_authenticated %}
-        {% if is_followed %}
+    {% if is_followed %}
     {% if tasks %}
-
-    <h3>Прогресс: {{ progress }} / {{ tasks }}</h3>
+    <h3 style="align:center; width: 100%; color: white; margin-top: 10px;">Прогресс: {{ progress }} / {{ tasks }}</h3>
     {% endif %}
-            <a class="btn btn-secondary" href="{% url 'leave_the_course' course.id %}">Покинуть</a>
-        {% elif request.user == course.author %}
+    <a class="teaching_button" href="{% url 'leave_the_course' course.id %}">Покинуть</a>
 
-        {% else %}
-            {% if course.type_course == '1' %}
-                <a class="btn btn-secondary" href="{% url 'join_the_course' course.id %}">Вступить</a>
-            {% else %}
-                <a class="btn btn-secondary" href="{% url 'payment' course.pk %}">Купить</a>
-            {% endif %}
-        {% endif %}
+    {% elif request.user == course.author %}
+
     {% else %}
-        <h5><i>Авторизуйтесь, чтобы вступить</i></h5>
+    {% if course.type_course == '1' %}
+    <a class="teaching_button" href="{% url 'join_the_course' course.id %}">Вступить</a>
+    {% else %}
+    <a class="teaching_button" href="{% url 'payment' course.pk %}">Купить</a>
     {% endif %}
+    {% endif %}
+    {% else %}
+    <h5><i>Авторизуйтесь, чтобы вступить</i></h5>
+    {% endif %}
+
 
     {% if request.user == course.author %}
-    <a class="btn btn-secondary" href="{% url 'update_course' course.id %}">Изменить курс</a>
-    <a class="btn btn-secondary" href="{% url 'delete_course' course.id %}">Удалить курс</a>
-    <a class="btn btn-secondary" href="{% url 'create_post' course.id %}">Добавить лекцию</a>
-    <a class="btn btn-secondary" href="{% url 'create_test' course.id %}">Добавить тест</a>
+    <a class="teaching_button" href="{% url 'update_course' course.id %}">Изменить курс</a>
+    <a class="teaching_button" href="{% url 'delete_course' course.id %}">Удалить курс</a>
+    <a class="teaching_button" href="{% url 'create_post' course.id %}">Добавить лекцию</a>
+    <a class="teaching_button" href="{% url 'create_test' course.id %}">Добавить тест</a>
     {% endif %}
-    <br><br>
-    <h5>О курсе: {{ course.about_the_course|linebreaks }}</h5>
-{% if posts %}
-    <h4 align="center">Лекции:</h4>
+
+    <a class="" href="{{ course.author }}" style="text-decoration: none; width: 100%;">
+        <h2 align="center" style="width: 100%; color: white; margin-top: 10px;">Автор: {{ course.author.last_name }} {{ course.author.first_name }} {{ course.author.patronymic }}</h2>
+    </a>
+
+    <h3 style="align:center; width: 90%; color: white; backdrop-filter: blur(15px); padding-left: 20px; padding-top: 20px;padding-right: 20px;padding-bottom: 20px; border: 2px solid rgba(255,255,255,0.5); border-radius: 20px;">
+        О курсе: {{ course.about_the_course|linebreaks }}
+    </h3>
+
+
+    {% if posts %}
+    <h3 style="align: center; width: 100%; color: white; margin-left: 45%; margin-top: 20px;">Лекции</h3>
     {% for p in posts %}
-    <div class="card">
-        <div class="card-body">
-        <h3>{{ p.title }}</h3>
-        <h6>Дата создания: {{ p.time_created }} |
-        Дата изменения: {{ p.time_updated }}</h6>
+    <a href="{{ p.get_absolute_url }}" style="text-decoration: none; width: 100%; margin-left: 7%;">
+        <div class="card" style="width: 85%; height: 200px; display: flex; flex-direction: column; ">
+            <h3 style="color: white;">{{ p.title }}</h3>
+            <h3 style="color: white;">Дата создания: {{ p.time_created }} | Дата изменения: {{ p.time_updated }}</h3>
         </div>
-        <a class="btn btn-secondary" href="{{ p.get_absolute_url }}">Подробнее</a>
-    </div>
-    <br>
+    </a>
     {% endfor %}
-{% endif %}
+    {% endif %}
 
     {% if tests %}
-    <hr>
-    <h4 align="center">Практика:</h4>
-    <h4>Вступите, чтобы просматривать и выполнять задания</h4>
+    <h3 style="align: center; width: 100%; color: white; margin-left: 45%; margin-top: 20px;">Практика</h3>
+
     {% for t in tests %}
-    <div class="card">
-        <div class="card-body">
-        <h3>{{ t.title }}</h3>
-        <h6>Дата создания: {{ t.time_created }} |
-        Дата изменения: {{ t.time_updated }}</h6>
-        </div>
-
-            {% if is_followed %}
-        <a class="btn btn-secondary" href="{% url 'show_specific_test' t.course.pk t.id %}">Подробнее</a>
+    <div class="card" style="width: 85%; height: 200px; display: flex; flex-direction: column; ">
+        <h3 style="color: white;">{{ t.title }}</h3>
+        <h3 style="color: white;">Дата создания: {{ t.time_created }} | Дата изменения: {{ t.time_updated }}</h3>
+        {% if is_followed %}
+        <a class="teaching_button" href="{% url 'show_specific_test' t.course.pk t.id %}">Подробнее</a>
+        {% elif request.user == course.author %}
+        <a class="teaching_button" href="{% url 'show_specific_test' t.course.pk t.id %}">Подробнее</a>
         {% endif %}
-
-
     </div>
-    <br>
     {% endfor %}
-{% endif %}
-
-<!--     {% if good_tests %}-->
-<!--    <hr>-->
-<!--    <h4 align="center">Практика:</h4>-->
-<!--    {% for gt in good_tests %}-->
-<!--    <div class="card">-->
-<!--        <div class="card-body">-->
-<!--        <h3>{{ gt.title }}</h3>-->
-<!--        </div>-->
-<!--        <a class="btn btn-secondary" href="{% url 'good_test' gt.course.pk gt.pk %}">Пройти тест</a>-->
-<!--    </div>-->
-<!--    <br>-->
-<!--    {% endfor %}-->
-<!--{% endif %}-->
-
-    <hr>
-    <h3 align="center">Комментарии: {{ count_comments }}</h3>
-    {% if request.user.is_authenticated %}
-        <form method="post" autocomplete="off">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button class="btn btn-secondary">Добавить</button>
-        </form>
-        <br>
-    {% else %}
-        <h5><i>Авторизуйтесь, чтобы оставить комментарий</i></h5>
     {% endif %}
 
-    {% for c in comments %}
-    <div class="card">
-        <div class="card-body">
-            <h5>
-                <img src="{{ c.author.photo.url }}" alt="" width="40" height="40">
-                <a class="btn btn-outline-secondary" href="{% url 'another_user' c.author.pk %}">{{ c.author }}</a>
-            </h5>
-            <h5>{{ c.comment_text }}</h5>
-            <h5>{{ c.time_created }}</h5>
-        </div>
-    </div>
-    <br>
-    {% endfor %}<br><br>
-</div>
-{% endblock %}
+    <h3 style="align: center; width: 100%; color: white; margin-left: 45%; margin-top: 20px;">Комментарии: {{ count_comments }}</h3>
+    {% if request.user.is_authenticated %}
 
+    <h2 align="center" style="width: 100%; color: white; margin-top: 30px;">Добавить комментарий:</h2>
+
+    <form method="post" style="width: 100%; margin-bottom: 30px;" autocomplete="off">
+        {% csrf_token %}
+        <section class="form-section">
+            <div class="form-box">
+                <div class="form-value">
+                    <div class="inputbox">
+                        <input name="comment_text" class="" id="id_comment_text" required>
+                        <label>Введите текст</label>
+                    </div>
+                    <button class="form-button" type="submit">Добавить</button>
+                </div>
+            </div>
+        </section>
+    </form>
+    {% else %}
+    <h3 style="align: center; width: 100%; color: white; margin-left: 45%; margin-top: 20px;">Авторизуйтесь, чтобы
+        оставить комментарий</h3>
+    {% endif %}
+
+
+
+    {% for c in comments %}
+    <div class="card" style="width: 85%; height: 200px; display: flex; flex-direction: column; ">
+        <h4>
+            {% if c.author.photo %}
+            <img src="{{ c.author.photo.url }}" alt=""
+                 style="margin-right: 20px; margin-top: -20px; width: 70px; height: 70px; object-fit: cover; border-radius: 50%; display: flex; box-shadow: 1px 3px 12px rgba(0, 0, 0, 0.18); float: left;">
+            {% endif %}
+            <a style="text-decoration: none; color: white;" class="btn btn-outline-secondary"
+               href="{% url 'another_user' c.author.pk %}">{{ c.author }}</a>
+        </h4>
+        <h3 style="color: white;">{{ c.comment_text }}</h3>
+        <h3 style="color: white;">{{ c.time_created }}</h3>
+    </div>
+    {% endfor %}
+
+</section>
+</body>
 <script src="https://js.stripe.com/v3/"></script>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
 <script>
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
@@ -149,4 +168,56 @@ checkoutButton.addEventListener("click", function () {
       console.error("Error:", error);
     });
 });
+
+
+
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+		max: 25,
+		speed: 400,
+		glare: true,
+		"max-glare": 1,
+	});
+	const menuHamburger = document.querySelector(".menu-hamburger")
+        const navLinks = document.querySelector(".nav-links")
+
+        menuHamburger.addEventListener('click',()=>{
+        navLinks.classList.toggle('mobile-menu')
+        })
+
+const button = document.querySelector("button"),
+      toast = document.querySelector(".toast")
+      closeIcon = document.querySelector(".close"),
+      progress = document.querySelector(".progress");
+      let timer1, timer2;
+      button.addEventListener("click", () => {
+        toast.classList.add("active");
+        progress.classList.add("active");
+        timer1 = setTimeout(() => {
+            toast.classList.remove("active");
+        }, 5000); //1s = 1000 milliseconds
+        timer2 = setTimeout(() => {
+          progress.classList.remove("active");
+        }, 5300);
+      });
+
+      closeIcon.addEventListener("click", () => {
+        toast.classList.remove("active");
+
+        setTimeout(() => {
+          progress.classList.remove("active");
+        }, 300);
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      });
+
+
+
+
 </script>
+<script>
+    setTimeout(function(){
+	document.getElementById('message2').style.display = 'none';
+}, 3000);
+</script>
+
+</html>

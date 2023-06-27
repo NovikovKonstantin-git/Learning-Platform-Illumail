@@ -28,10 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
-
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
+    'chat',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,8 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'courses.apps.CoursesConfig',
+    'study_groups.apps.StudyGroupsConfig',
     'api.apps.ApiConfig',
     'rest_framework',
+    'payments.apps.PaymentsConfig',
+    'forum.apps.ForumConfig',
 ]
 
 MIDDLEWARE = [
@@ -73,20 +76,35 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'illumail.wsgi.application'
+ASGI_APPLICATION = 'illumail.asgi.application'
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'OPTIONS': {
+#             'read_default_file': '/home/wizard/Python/Django/LearningPltfrm/illumail/my.cnf',
+#             "init_command": "SET foreign_key_checks = 0;",
+#         }
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-            'read_default_file': '/home/wizard/Python/Django/LearningPltfrm/illumail/my.cnf',
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -135,4 +153,8 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+STRIPE_PUBLIC_KEY = 'pk_test_51NBKWuAu80O9dq779iS9UZzXLFNmeuvnHofv2KiQ79w28BfEBLXNiGqrpZdSwuUCnuM8PayrOImZNE7ogFU0iQLB00Kz61pVrN'
+STRIPE_SECRET_KEY = 'sk_test_51NBKWuAu80O9dq77TD5SIN6bFp1WxS5fu7kzfVVRkaAL7jq6pEUfQfUnVcRQL5rVHdM8tSK1E7DU38qZAZ6pNoYa007yEXYZpR'
+STRIPE_WEBHOOK_SECRET = 'whsec_da06152981099a863ef676ef35c7cf7e75fc6b780f1ee6007ace92e4810c5fbc'
 

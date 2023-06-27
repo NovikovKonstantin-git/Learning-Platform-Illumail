@@ -1,46 +1,67 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
 
-{% block content %}
-<div class="container">
-    <a class="btn btn-secondary" href="{% url 'create_course' %}">Создать курс</a>
-    <a class="btn btn-secondary" href="{% url 'create_group' %}">Создать учебную группу</a>
-    <h3 align="center">Преподавание</h3>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+
+</head>
+<body>
+<section class="container" style="word-wrap: break-word;">
+
+        {% include 'nav.html' %}
+
+    <a class="teaching_button" href="{% url 'create_course' %}">Создать курс</a>
+    <a class="teaching_button" href="{% url 'create_group' %}">Создать учебную группу</a>
+    <h2 align="center" style="color: white; width: 100%;">Преподавание</h2>
+    <h2 align="center" style="color: white; width: 100%;">Курсы:</h2>
+
     {% for c in courses %}
     {% if request.user == c.author %}
-    <div class="card" style="width: 21rem; display: inline-block; margin-right: 30px; margin-bottom: 30px;">
-        <div class="card-header">
-            <h3 align="center">{{ c.title }}</h3>
-        </div>
-        {% if c.course_photo %}
-        <img src="{{ c.course_photo.url }}" class="card-img-top" alt="" height="175"> <br>
-        {% endif %}
-        Дата создания: {{ c.time_created }} <br>
-        Дата изменения: {{ c.time_updated }} <br>
-        Автор: {{ c.author }} ({{ c.author.first_name }}) <br>
-        <div class="d-grid gap-2">
-            <a class="btn btn-secondary" href="{{ c.get_absolute_url }}">Подробнее</a>
+    <div class="card">
+        <div class="content">
+            <h2>{{ c.title }}</h2>
+            <h3>{{ c.title }}</h3><br>
+            <p>Дата создания: {{ c.time_created }}<br><br>
+                Дата изменения: {{ c.time_updated }}<br>
+                Автор: {{ c.author }} ({{ c.author.first_name }})<br>
+            </p>
+            <a href="{{ c.get_absolute_url }}">Подробнее</a>
         </div>
     </div>
     {% endif %}
     {% endfor %}
-    <hr>
-    <h3 align="center">Учебные группы</h3>
+
+    <h2 align="center" style="color: white; width: 100%;">Учебные группы:</h2>
+
     {% for g in groups %}
-    <div class="card" style="width: 21rem; display: inline-block; margin-right: 30px; margin-bottom: 30px;">
-        <div class="card-header">
-            <h3 align="center" style="height: 6rem; text-align: center;">{{ g.title }}</h3>
-        </div>
-        {% if g.group_photo %}
-        <img src="{{ g.group_photo.url }}" class="card-img-top" alt="" height="175"> <br>
-        {% endif %}
-        Дата создания: {{ g.time_created }} <br>
-        Дата изменения: {{ g.time_updated }} <br>
-        Автор: {{ g.author }} ({{ g.author.first_name }}) <br>
-        <div class="d-grid gap-2">
-            <a class="btn btn-secondary" href="{{ g.get_absolute_url }}">Подробнее</a>
+    <div class="card">
+        <div class="content">
+            <h2>{{ g.title }}</h2>
+            <h3>{{ g.title }}</h3>
+            <p>Дата создания: {{ g.time_created }}<br><br>
+                Дата изменения: {{ g.time_updated }}<br>
+                Автор: {{ g.author }} ({{ g.author.first_name }})<br>
+            </p>
+            <a href="{{ g.get_absolute_url }}">Подробнее</a>
         </div>
     </div>
     {% endfor %}
-</div>
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+		max: 25,
+		speed: 400,
+		glare: true,
+		"max-glare": 1,
+	});
 
-{% endblock %}
+</script>
+</html>

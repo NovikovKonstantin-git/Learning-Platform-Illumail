@@ -5,6 +5,7 @@ from django.views.generic import ListView, CreateView, UpdateView
 from users.models import CustomUser
 from .models import PostsInStudyGroup, StudyGroup, Valuation
 from .forms import *
+from django.contrib import messages
 
 
 class ShowPostsGroups(ListView):
@@ -185,6 +186,12 @@ def save_update_valuations(request, pk, post_id, work_id):
 
 
 def join_the_group(request):
-    code = StudyGroup.objects.get(group_code=request.GET.get('code', ))
-    StudyGroup.objects.get(id=code.pk).customuser_set.add(request.user)
+    message_ok = False
+    try:
+        code = StudyGroup.objects.get(group_code=request.GET.get('code', ))
+        StudyGroup.objects.get(id=code.pk).customuser_set.add(request.user)
+        message_ok = True
+    except Exception:
+        message_ok = False
+        return HttpResponseRedirect(reverse('learning'))
     return HttpResponseRedirect(reverse('learning'))

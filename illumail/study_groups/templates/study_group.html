@@ -1,41 +1,108 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
 
-{% block content %}
-<div class="container">
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+</head>
+<body>
+
+
+<section class="container" style="word-wrap: break-word; width: 100%;">
+
+    {% include 'nav.html' %}
+
     {% if request.user.is_authenticated %}
-        <a class="btn btn-secondary" href="{% url 'show_students' study_group.id %}">Учащиеся</a>
+        <a href="{% url 'show_students' study_group.id %}" class="teaching_button">Учащиеся</a>
         {% if is_followed %}
-            <a class="btn btn-secondary" href="{% url 'my_valuations' study_group.id %}">Мои оценки</a>
-            <a class="btn btn-secondary" href="{% url 'leave_the_group' study_group.pk %}">Покинуть</a>
+            <a class="teaching_button" href="{% url 'my_valuations' study_group.id %}">Мои оценки</a>
+            <a class="teaching_button" href="{% url 'leave_the_group' study_group.pk %}">Покинуть</a>
         {% elif request.user == study_group.author %}
 
         {% else %}
-            <a class="btn btn-outline-secondary" href="">Вступить</a>
+            <a class="teaching_button" href="">Вступить</a>
         {% endif %}
     {% else %}
         <h5><i>Авторизуйтесь, чтобы вступить</i></h5>
     {% endif %}
     {% if request.user == study_group.author %}
-    <a class="btn btn-secondary" href="{% url 'update_group' study_group.pk %}">Изменить группу</a>
-    <a class="btn btn-secondary" href="{% url 'delete_group' study_group.pk %}">Удалить группу</a>
-    <a class="btn btn-secondary" href="{% url 'create_task' study_group.id %}">Добавить задание</a><br><br>
+    <a class="teaching_button" href="{% url 'update_group' study_group.pk %}">Изменить группу</a>
+    <a class="teaching_button" href="{% url 'delete_group' study_group.pk %}">Удалить группу</a>
+    <a class="teaching_button" href="{% url 'create_task' study_group.id %}">Добавить задание</a>
     {% endif %}
-    <br><br>
-    <h5>Код группы: {{ study_group.group_code }}</h5>
-    <h5>О группе: {{ study_group.about_the_group|linebreaks }}</h5>
-    <h5>Преподаватель: {{ study_group.author.last_name }} {{ study_group.author.first_name }} {{ study_group.author.patronymic }}</h5>
-    <a class="btn btn-secondary" href="{% url 'another_user' study_group.author.pk %}">Посетить</a><br><br>
+
+        <h2 align="center" style="width: 100%; color: white; margin-top: 10px;">Код группы: {{ study_group.group_code }}</h2>
+        <h2 align="center" style="width: 100%; color: white; margin-top: 10px;">О группе: {{ study_group.about_the_group|linebreaks }}</h2>
+        <a class="" href="{% url 'another_user' study_group.author.pk %}" style="text-decoration: none;">
+            <h2 align="center" style="width: 100%; color: white; margin-top: 10px;">Преподаватель: {{ study_group.author.last_name }} {{ study_group.author.first_name }} {{ study_group.author.patronymic }}</h2>
+        </a>
+
 
 
     {% for p in posts %}
-    <div class="card">
-        <div class="card-body">
-        <h3>{{ p.title }}</h3>
-        <h6>Дата создания: {{ p.time_created }} | Дата изменения: {{ p.time_updated }}</h6>
-        </div>
-        <a class="btn btn-secondary" href="{{ p.get_absolute_url }}">Подробнее</a>
+    <a href="{{ p.get_absolute_url }}" style="text-decoration: none; width: 85%;">
+    <div class="card" style="width: 85%; height: 200px; display: flex; flex-direction: column; ">
+
+        <h3 style="color: white;">{{ p.title }}</h3>
+        <h3 style="color: white;">Дата создания: {{ p.time_created }} | Дата изменения: {{ p.time_updated }}</h3>
+
     </div>
-    <br>
+        </a>
     {% endfor %}
-</div>
-{% endblock %}
+
+
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+		max: 25,
+		speed: 400,
+		glare: true,
+		"max-glare": 1,
+	});
+	const menuHamburger = document.querySelector(".menu-hamburger")
+        const navLinks = document.querySelector(".nav-links")
+
+        menuHamburger.addEventListener('click',()=>{
+        navLinks.classList.toggle('mobile-menu')
+        })
+
+const button = document.querySelector("button"),
+      toast = document.querySelector(".toast")
+      closeIcon = document.querySelector(".close"),
+      progress = document.querySelector(".progress");
+      let timer1, timer2;
+      button.addEventListener("click", () => {
+        toast.classList.add("active");
+        progress.classList.add("active");
+        timer1 = setTimeout(() => {
+            toast.classList.remove("active");
+        }, 5000); //1s = 1000 milliseconds
+        timer2 = setTimeout(() => {
+          progress.classList.remove("active");
+        }, 5300);
+      });
+
+      closeIcon.addEventListener("click", () => {
+        toast.classList.remove("active");
+
+        setTimeout(() => {
+          progress.classList.remove("active");
+        }, 300);
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      });
+
+
+</script>
+
+
+</html>

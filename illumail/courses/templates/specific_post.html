@@ -1,54 +1,102 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
 
-{% block content %}
-<div class="container">
-        {% if request.user == post.course.author %}
-            <a class="btn btn-secondary" href="{% url 'delete_post' post.course.id post.id %}">Удалить задание</a><br><br>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание</title>
+
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+</head>
+<body>
+
+
+<section class="container" style="word-wrap: break-word; width: 100%;">
+
+    {% include 'nav.html' %}
+
+    {% if request.user.is_authenticated %}
+
+    {% if request.user == post.course.author %}
+    <a class="teaching_button" href="{% url 'delete_post' post.course.id post.id %}">Удалить задание</a>
+    {% endif %}
+    <div class="card" style="width: 80%; height: 700px; display: flex; flex-direction: column; ">
+        <h3 style="color: white;">Курс: {{ post.course }}</h3>
+        <h3 style="color: white;">Тема: {{ post.title }}</h3>
+
+        {% if post.photo %}
+        <img src="{{ post.photo.url }}" alt="" height="220"> <br>
         {% endif %}
 
-    <div class="row">
-        <div class="card" style="display: inline-block;">
-            <h3 class="card-header" align="center">{{ post.title }}</h3>
-            Курс: {{ post.course }} <br>
-            {% if post.photo %}
-            <img src="{{ post.photo.url }}" alt="" class="card-img-top" height="220"> <br>
-            {% endif %}
-
-            {% if post.file %}
-            <object data="data/test.pdf" type="application/docx" width="300" height="200">
-                        <a href="{{ post.file.url }}">{{ post.file }}</a>
-                    </object>
-            <br>
-            {% endif %}
-
-            {% if post.post_text %}
-            {{ post.post_text }} <br>
-            {% endif %}
-
-            Дата создания: {{ post.time_created }} <br>
-            Дата изменения: {{ post.time_updated }} <br>
-        </div>
-
-        {% if post.post_type == "2" %}
-        {% if user.is_authenticated %}
-        <br> <br>
-        <div class="col-sm-5 px-sm-5">
-            <div class="card">
-                <h4 class="card-header">Выполненные задания</h4>
-                <div class="card-body">
-                    <h5 class="card-title">Прикрепите сюда выполненные здания</h5>
-                    <form method="post" enctype="multipart/form-data" autocomplete="off">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-secondary">Сдать</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        {% if post.file %}
+        <h3 style="color: white;">Лекция:
+        <object data="data/test.pdf" type="application/docx" width="300" height="200">
+            <a href="{{ post.file.url }}" style="text-decoration: none; color: purple;">{{ post.file }}</a>
+        </object>
+        </h3>
         {% endif %}
+
+        {% if post.post_text %}
+        <h3 style="color: white; padding-right: 20px; padding-left: 20px;">{{ post.post_text }}</h3>
         {% endif %}
+
+        <h3 style="color: white;">Дата создания: {{ post.time_created }}</h3>
+        <h3 style="color: white;">Дата изменения: {{ post.time_updated }}</h3>
+
     </div>
-</div>
-{% endblock %}
+
+
+    {% endif %}
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+		max: 25,
+		speed: 400,
+		glare: true,
+		"max-glare": 1,
+	});
+	const menuHamburger = document.querySelector(".menu-hamburger")
+        const navLinks = document.querySelector(".nav-links")
+
+        menuHamburger.addEventListener('click',()=>{
+        navLinks.classList.toggle('mobile-menu')
+        })
+
+const button = document.querySelector("button"),
+      toast = document.querySelector(".toast")
+      closeIcon = document.querySelector(".close"),
+      progress = document.querySelector(".progress");
+      let timer1, timer2;
+      button.addEventListener("click", () => {
+        toast.classList.add("active");
+        progress.classList.add("active");
+        timer1 = setTimeout(() => {
+            toast.classList.remove("active");
+        }, 5000); //1s = 1000 milliseconds
+        timer2 = setTimeout(() => {
+          progress.classList.remove("active");
+        }, 5300);
+      });
+
+      closeIcon.addEventListener("click", () => {
+        toast.classList.remove("active");
+
+        setTimeout(() => {
+          progress.classList.remove("active");
+        }, 300);
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      });
+
+
+
+</script>
+
+
+</html>

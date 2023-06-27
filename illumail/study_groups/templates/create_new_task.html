@@ -1,11 +1,109 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
 
-{% block content %}
-<div class="container">
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-secondary">Добавить задание</button>
-  </form>
-</div>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+</head>
+<body>
+
+
+<section class="container" style="word-wrap: break-word; width: 100%;">
+
+    {% include 'nav.html' %}
+
+    {% if request.user.is_authenticated %}
+
+    <h2 align="center" style="width: 100%; color: white; margin-top: 30px;">Создание задания:</h2>
+
+    <form method="post" style="width: 100%; margin-bottom: 10px; height: 600px;" autocomplete="off">
+        {% csrf_token %}
+        <section class="form-section">
+            <div class="form-box" style="height: 500px;">
+                <div class="form-value">
+                    <div class="inputbox">
+                        <input name="title" class="" required>
+                        <label>Название:</label>
+                    </div>
+                    <div class="inputbox">
+                        <input name="post_text" class="" required>
+                        <label>Описание задания</label>
+                    </div>
+
+
+                    <div class="row" style="color: white;">
+                        <label>Изображение:</label>
+                        <input type="file" accept="image/*" id="id_photo" name="photo"/>
+                    </div>
+
+                    <div class="row" style="color: white;">
+                        <span id="output"></span>
+                    </div>
+
+                    <div class="" style="color: white;">
+                        <label>Файл:</label>
+                        <input type="file" id="id_file" name="file"/>
+                    </div>
+
+
+
+                    <div id="id_post_type">
+                        <div>
+                            <label for="id_post_type_0" style="color: white;">
+                              <input type="radio" name="post_type" value="1" required="" id="id_post_type_0">Лекция
+                            </label>
+                        </div>
+                        <div>
+                            <label for="id_post_type_1" style="color: white;">
+                              <input type="radio" name="post_type" value="2" required="" id="id_post_type_1">Практика
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="form-button" type="submit">Добавить</button>
+                </div>
+            </div>
+        </section>
+    </form>
+
+    {% endif %}
+
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+function handleFileSelect(evt) {
+    var group_photo = evt.target.files;
+    var cp = group_photo[0];
+
+    if (!cp.type.match('image.*')) {
+        alert("Image only please....");
+    }
+    var reader = new FileReader();
+
+    reader.onload = (function(theFile) {
+        return function(e) {
+
+            var span = document.createElement('span');
+            span.innerHTML = ['<img class="thumb" width="350" title="', escape(theFile.name), '" src="', e.target.result, '" />'].join('');
+            document.getElementById('output').insertBefore(span, null);
+        };
+    })(cp);
+
+    reader.readAsDataURL(cp);
+}
+document.getElementById('id_group_photo').addEventListener('change', handleFileSelect, false);
+
+</script>
+
+{% block javascript %}
+<script src="{% static 'courses/js/script.js' %}"></script>
 {% endblock %}
+</html>

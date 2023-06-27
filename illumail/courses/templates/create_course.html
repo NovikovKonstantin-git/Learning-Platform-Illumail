@@ -1,31 +1,133 @@
-{% extends 'base.html' %}
-{% load static %}
+ {% load static %}
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+</head>
+<body>
 
 
-{% block content %}
-<div class="container">
-    <form method="post" autocomplete="off" enctype="multipart/form-data">
+<section class="container" style="word-wrap: break-word; width: 100%;">
+
+    {% include 'nav.html' %}
+
+    {% if request.user.is_authenticated %}
+
+    <h2 align="center" style="width: 100%; color: white; margin-top: 30px;">Создание курса:</h2>
+
+    <form method="post" style="width: 100%; margin-bottom: 10px; height: 700px;" autocomplete="off">
         {% csrf_token %}
-        Название курса: {{ form.title }} <br> <br>
-        Описание курса: {{ form.about_the_course }} <br><br>
-        Категория курса: {{ form.category }}
-        <div class="row">
-            <label>Фото курса:</label>
-            <input type="file" id="id_course_photo" name="course_photo"/>
-        </div>
-        <br>
-        <div class="row">
+        <section class="form-section">
+            <div class="form-box" style="height: 600px;">
+                <div class="form-value">
+                    <div class="inputbox">
+                        <input name="title" class="" required>
+                        <label>Название курса</label>
+                    </div>
+                    <div class="inputbox">
+                        <input name="about_the_course" class="" required>
+                        <label>Описание курса</label>
+                    </div>
 
-            <span id="output"></span>
-        </div>
 
-        <br>
-        <button class="btn btn-secondary">Создать</button>
+                    <p style="color: white;">Категория:</p>
+
+                    <div class="dropdown">
+                        <div class="select">
+                            <span class="selected" id="id_category">Не выбрано</span>
+                            <div class="caret"></div>
+                        </div>
+                        <ul class="menu">
+<!--                            {% for f in form.category %}-->
+<!--                            <li>{{ f }}</li>-->
+<!--                            {% endfor %}-->
+                            {{ form.category }}
+
+                        </ul>
+                    </div>
+
+                    <div class="row" style="color: white;">
+                        <label>Фото курса:</label>
+                        <input  style="" type="file" id="id_course_photo" name="course_photo"/>
+                    </div>
+                    <br>
+                    <div class="row" style="color: white;">
+                        <span id="output"></span>
+                    </div>
+
+                    <button class="form-button" type="submit">Добавить</button>
+                </div>
+            </div>
+        </section>
     </form>
-</div>
+
+    {% endif %}
+
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+function handleFileSelect(evt) {
+    var course_photo = evt.target.files;
+    var cp = course_photo[0];
+
+    if (!cp.type.match('image.*')) {
+        alert("Image only please....");
+    }
+    var reader = new FileReader();
+
+    reader.onload = (function(theFile) {
+        return function(e) {
+
+            var span = document.createElement('span');
+            span.innerHTML = ['<img class="thumb" width="350" title="', escape(theFile.name), '" src="', e.target.result, '" />'].join('');
+            document.getElementById('output').insertBefore(span, null);
+        };
+    })(cp);
+
+    reader.readAsDataURL(cp);
+}
+document.getElementById('id_course_photo').addEventListener('change', handleFileSelect, false);
+
+
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+        const select = dropdown.querySelector('.select');
+        const caret = dropdown.querySelector('.caret');
+        const menu = dropdown.querySelector('.menu');
+        const options = dropdown.querySelectorAll('.menu li');
+        const selected = dropdown.querySelector('.selected');
+
+    select.addEventListener('click', () => {
+        select.classList.toggle('select-clicked');
+        caret.classList.toggle('caret-rotate');
+        menu.classList.toggle('menu-open');
+    });
+
+    options.forEach(option => {
+        option.addEventListener('click', () => {
+            selected.innerText = option.innerText;
+            select.classList.remove('select-clicked');
+            caret.classList.remove('caret-rotate');
+            menu.classList.remove('menu-open');
+            option.forEach(option => {
+                option.classList.remove('active');
+            });
+            option.classList.add('active');
+        });
+    });
+});
+</script>
 
 {% block javascript %}
 <script src="{% static 'courses/js/script.js' %}"></script>
 {% endblock %}
-
-{% endblock %}
+</html>

@@ -1,36 +1,91 @@
-{% extends 'base.html' %}
-{% load static %}
+ {% load static %}
+<!DOCTYPE html>
 
-{% block content %}
-<div class="container">
-<form method="post" enctype="multipart/form-data" autocomplete="off">
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+</head>
+<body>
+
+
+<section class="container" style="word-wrap: break-word; width: 100%;">
+
+    {% include 'nav.html' %}
+
+    {% if request.user.is_authenticated %}
+
+    <h2 align="center" style="width: 100%; color: white; margin-top: 30px;">Изменение курса:</h2>
+
+    <form method="post" style="width: 100%; margin-bottom: 10px; height: 830px;" autocomplete="off">
         {% csrf_token %}
+        <section class="form-section">
+            <div class="form-box" style="height: 730px;">
+                <div class="form-value">
+                    <div class="inputbox">
+                        <input name="title" class="" required value="{{ course.title }}">
+                        <label>Название группы</label>
+                    </div>
+                    <div class="inputbox">
+                        <input name="about_the_course" class="" required value="{{ course.about_the_course }}">
+                        <label>Описание группы</label>
+                    </div>
+                        {{ form.category }}
 
-        <p>Название курса: {{ form.title }}<p>
-        <p>Описание курса: {{ form.about_the_course }}</p>
-        <p>Категория курса: {{ form.category }} </p>
-        <p>Изображение курса на данный момент:</p>
-        <p><img src="{{ course.course_photo.url }}" alt="" width="350"></p>
+                    <p style="color: white;">Изображение курса на данный момент:</p>
+                    <p><img src="{{ course.course_photo.url }}" alt="" width="250" height="150"></p>
 
-        <div class="row">
-            <label>Новое фото курса:</label>
-            <input type="file" id="id_course_photo" name="course_photo"/>
-        </div>
-        <br>
-        <div class="row">
-            <span id="output"></span>
-        </div>
+                    <div class="row" style="color: white;">
+                        <label>Новое фото курса:</label>
+                        <input type="file" id="id_course_photo" name="course_photo"/>
+                    </div>
+                    <br>
+                    <div class="row" style="color: white;">
+                        <span id="output"></span>
+                    </div>
 
+                    <button class="form-button" type="submit">Сохранить изменения</button>
+                </div>
+            </div>
+        </section>
+    </form>
 
-        <br>
+    {% endif %}
 
-        <button class="btn btn-secondary">Сохранить изменения</button>
-        <br> <br>
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+function handleFileSelect(evt) {
+    var course_photo = evt.target.files;
+    var cp = course_photo[0];
 
-</form>
-</div>
+    if (!cp.type.match('image.*')) {
+        alert("Image only please....");
+    }
+    var reader = new FileReader();
+
+    reader.onload = (function(theFile) {
+        return function(e) {
+
+            var span = document.createElement('span');
+            span.innerHTML = ['<img class="thumb" width="350" title="', escape(theFile.name), '" src="', e.target.result, '" />'].join('');
+            document.getElementById('output').insertBefore(span, null);
+        };
+    })(cp);
+
+    reader.readAsDataURL(cp);
+}
+document.getElementById('id_course_photo').addEventListener('change', handleFileSelect, false);
+</script>
+
 {% block javascript %}
 <script src="{% static 'courses/js/script.js' %}"></script>
 {% endblock %}
-
-{% endblock %}
+</html>

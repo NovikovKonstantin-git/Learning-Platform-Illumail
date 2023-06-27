@@ -1,11 +1,97 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
 
-{% block content %}
-<div class="container">
-  <form method="post" autocomplete="off">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-secondary">Создать</button>
-  </form>
-</div>
-{% endblock %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+</head>
+<body>
+
+
+<section class="container" style="word-wrap: break-word; width: 100%;">
+
+    {% include 'nav.html' %}
+
+    {% if request.user.is_authenticated %}
+
+    <h2 align="center" style="width: 100%; color: white; margin-top: 30px;">Добавить тест:</h2>
+
+    <form method="post" style="width: 100%; margin-bottom: 10px;" autocomplete="off">
+        {% csrf_token %}
+        <section class="form-section" style="margin-bottom: 200px;">
+            <div class="form-box" style="height: 400px;">
+                <div class="form-value">
+                    <div class="inputbox">
+                        <input name="title" id="id_title" class="" required>
+                        <label>Название теста</label>
+                    </div>
+                  <div class="inputbox">
+                        <input name="question" id="id_question" class="" required>
+                        <label>Вопрос:</label>
+                    </div>
+                  <div class="inputbox">
+                        <input name="true_answer" id="id_true_answer" class="" required>
+                        <label>Правильный ответ</label>
+                    </div>
+                    <button class="form-button" type="submit">Создать тест</button>
+                </div>
+            </div>
+        </section>
+    </form>
+
+    {% else %}
+    <h5><i>Авторизуйтесь, чтобы создавать тесты</i></h5>
+    {% endif %}
+
+
+
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+		max: 25,
+		speed: 400,
+		glare: true,
+		"max-glare": 1,
+	});
+	const menuHamburger = document.querySelector(".menu-hamburger")
+        const navLinks = document.querySelector(".nav-links")
+
+        menuHamburger.addEventListener('click',()=>{
+        navLinks.classList.toggle('mobile-menu')
+        })
+
+const button = document.querySelector("button"),
+      toast = document.querySelector(".toast")
+      closeIcon = document.querySelector(".close"),
+      progress = document.querySelector(".progress");
+      let timer1, timer2;
+      button.addEventListener("click", () => {
+        toast.classList.add("active");
+        progress.classList.add("active");
+        timer1 = setTimeout(() => {
+            toast.classList.remove("active");
+        }, 5000); //1s = 1000 milliseconds
+        timer2 = setTimeout(() => {
+          progress.classList.remove("active");
+        }, 5300);
+      });
+
+      closeIcon.addEventListener("click", () => {
+        toast.classList.remove("active");
+
+
+
+
+</script>
+
+
+</html>

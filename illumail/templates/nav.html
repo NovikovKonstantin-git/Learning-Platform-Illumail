@@ -1,0 +1,38 @@
+{% load static %}
+<nav class="nav-navbar">
+    <a href="{% url 'show_courses' %}" class="logo">Illumail</a>
+    <div class="nav-links ">
+        <ul>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'show_news' %}">Новости</a></li>
+            <li><a href="{% url 'show_courses' %}">Каталог</a></li>
+            <li><a href="{{ user.get_absolute_url }}">Мой профиль</a></li>
+            <li><a href="{% url 'learning' %}">Обучение</a></li>
+            <li><a href="{% url 'teaching' %}">Преподавание</a></li>
+            <li><a href="{% url 'show_section' %}">Форум</a></li>
+            {% else %}
+            <li><a href="{% url 'login_user' %}">Войти</a></li>
+            <li><a href="{% url 'register_user' %}">Регистрация</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    <form action="{% url 'search_course' %}" method="get">
+        <section class="section-search">
+            <div class="search-box">
+                <div class="form-value">
+                    <div class="search-input">
+                        <input autocomplete="off" type="search"
+                               aria-label="Search" name="search" required>
+                        <label>Поиск курса</label>
+                        <button class="search-button" type="submit">Поиск</button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </form>
+
+    <img src="{% static 'courses/img/menu-btn.png' %}" alt="menu-hamburger" class="menu-hamburger">
+</nav>
+
+<header class="header-nav"></header>

@@ -1,31 +1,110 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
 
-{% block content %}
-<div class="container">
-    <h3 align="center">Обсуждение в теме: {{ subsection }}</h3>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+
+</head>
+<body>
+
+
+<section class="container" style="word-wrap: break-word; width: 100%;">
+
+    {% include 'nav.html' %}
+
     {% if request.user.is_authenticated %}
-        <form method="post" autocomplete="off">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button class="btn btn-secondary">Добавить</button>
-        </form>
-        <br>
+
+    <h2 align="center" style="width: 100%; color: white; margin-top: 30px;">Добавить комментарий:</h2>
+
+    <form method="post" style="width: 100%; margin-bottom: 10px;" autocomplete="off">
+        {% csrf_token %}
+        <section class="form-section">
+            <div class="form-box">
+                <div class="form-value">
+                    <div class="inputbox">
+                        <input name="comm_text" class="" required>
+                        <label>Введите текст</label>
+                    </div>
+                    <button class="form-button" type="submit">Добавить</button>
+                </div>
+            </div>
+        </section>
+    </form>
+
     {% else %}
-        <h5><i>Авторизуйтесь, чтобы оставить комментарий</i></h5>
+    <h5><i>Авторизуйтесь, чтобы оставить комментарий</i></h5>
     {% endif %}
 
+    <h2 align="center" style="width: 100%; color: white; margin-top: 30px;">Все комментарии: </h2>
+
     {% for c in comments %}
-        <div class="card">
-        <div class="card-body">
-            <h5>
-                <img src="{{ c.user.photo.url }}" alt="" width="40" height="40">
-                <a class="btn btn-outline-secondary" href="{% url 'another_user' c.user.pk %}">{{ c.user }}</a>
-            </h5>
-            <h5>{{ c.comm_text }}</h5>
-            <h6>{{ c.date_text }}</h6>
-        </div>
+    <div class="card" style="width: 85%; height: 200px; display: flex; flex-direction: column; ">
+        <h4>
+            {% if c.user.photo %}
+            <img src="{{ c.user.photo.url }}" alt=""
+                 style="margin-right: 20px; margin-top: -20px; width: 70px; height: 70px; object-fit: cover; border-radius: 50%; display: flex; box-shadow: 1px 3px 12px rgba(0, 0, 0, 0.18); float: left;">
+            {% endif %}
+            <a style="text-decoration: none; color: white;" class="btn btn-outline-secondary" href="{% url 'another_user' c.user.pk %}">{{ c.user }}</a>
+        </h4>
+        <h3 style="color: white;">{{ c.comm_text }}</h3>
+        <h3 style="color: white;">{{ c.date_text }}</h3>
+
     </div>
-    <br>
-    {% endfor %}<br><br>
-</div>
-{% endblock %}
+    {% endfor %}
+
+
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+		max: 25,
+		speed: 400,
+		glare: true,
+		"max-glare": 1,
+	});
+	const menuHamburger = document.querySelector(".menu-hamburger")
+        const navLinks = document.querySelector(".nav-links")
+
+        menuHamburger.addEventListener('click',()=>{
+        navLinks.classList.toggle('mobile-menu')
+        })
+
+const button = document.querySelector("button"),
+      toast = document.querySelector(".toast")
+      closeIcon = document.querySelector(".close"),
+      progress = document.querySelector(".progress");
+      let timer1, timer2;
+      button.addEventListener("click", () => {
+        toast.classList.add("active");
+        progress.classList.add("active");
+        timer1 = setTimeout(() => {
+            toast.classList.remove("active");
+        }, 5000); //1s = 1000 milliseconds
+        timer2 = setTimeout(() => {
+          progress.classList.remove("active");
+        }, 5300);
+      });
+
+      closeIcon.addEventListener("click", () => {
+        toast.classList.remove("active");
+
+        setTimeout(() => {
+          progress.classList.remove("active");
+        }, 300);
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      });
+
+
+</script>
+
+
+</html>

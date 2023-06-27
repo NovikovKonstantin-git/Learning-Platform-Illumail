@@ -1,75 +1,158 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
 
-{% block content %}
-<div class="container">
-    <h3 align="center">{{ subtitle }}</h3>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
 
-    <div class="sorted-list">
-    <form action="{% url 'sort_courses' %}" method="get"> Сортировка:
-        <input type="radio" name="sort" value="cheap" style="margin-left: 5px"> Сначала дешевле
-        <input type="radio" name="sort" value="expensive" style="margin-left: 5px"> Сначала дорогие
-        <input type="radio" name="sort" value="new" style="margin-left: 5px"> Самые новые
-        <input type="radio" name="sort" value="old" style="margin-left: 5px"> Самые старые
-        <button class="btn btn-secondary" type='submit' style="margin-left: 5px">Применить</button>
-    </form>
-</div>
+    <link rel="stylesheet" href="{% static 'courses/css/learning.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 
-     <div class="filtered-list">
-    <form action="{% url 'filter_courses' %}" method="get"> Фильтрация:
-        <input type="radio" name="filter" value="free" style="margin-left: 5px"> Бесплатные
-        <input type="radio" name="filter" value="payment" style="margin-left: 5px"> Платные
-        <button class="btn btn-secondary" type='submit' style="margin-left: 5px">Применить</button>
-    </form>
-</div>
-    <br>
+</head>
+<body>
+
+
+<section class="container" style="word-wrap: break-word; width: 100%;   ">
+
+    {% include 'nav.html' %}
+
+<!--    <div class="toast">-->
+<!--        <div class="toast-content">-->
+<!--            <i class="fas fa-solid fa-check check"></i>-->
+<!--            <div class="message">-->
+<!--                <span class="text text-1">Success</span>-->
+<!--                <span class="text text-2">Your changes has been saved</span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <i class="fa-solid fa-xmark close"></i>-->
+<!--        <div class="progress"></div>-->
+<!--    </div>-->
+<!--    <button class="toast-btn">Show Toast</button>-->
+
+
+    <h2 align="center" style="color: white; width: 100%; margin-top: 30px;">{{ subtitle }}</h2>
+
+    <section class="section-sort-filtr">
+        <div class="sorted-list" style="width: 100%">
+            <form action="{% url 'sort_courses' %}" method="get"> Сортировка:
+                <input type="radio" name="sort" value="cheap" class="sort-filtr-radio"> Сначала дешевле
+                <input type="radio" name="sort" value="expensive"> Сначала дорогие
+                <input type="radio" name="sort" value="new"> Самые новые
+                <input type="radio" name="sort" value="old"> Самые старые
+                <button class="sort-filtr-btn" type='submit'>Применить</button>
+            </form>
+        </div>
+    </section>
+
+    <div class="filtered-list" style="width: 100%">
+        <form action="{% url 'filter_courses' %}" method="get"> Фильтрация:
+            <input type="radio" name="filter" value="free"> Бесплатные
+            <input type="radio" name="filter" value="payment"> Платные
+            <button type='submit' class="sort-filtr-btn">Применить</button>
+        </form>
+    </div>
+
     {% if page_obj %}
     {% for c in page_obj %}
-    <div class="card" style="width: 21rem; display: inline-block; margin-right: 30px; margin-bottom: 30px;">
-        <div class="card-header">
-            <h3 align="center">{{ c.title }}</h3>
-        </div>
-        {% if c.course_photo %}
-        <img src="{{ c.course_photo.url }}" class="card-img-top" alt="" height="175"> <br>
-        {% endif %}
-        Дата создания: {{ c.time_created }} <br>
-        Дата изменения: {{ c.time_updated }} <br>
-        Автор: {{ c.author }} ({{ c.author.first_name }}) <br>
-        {% if c.type_course == '1' %}
-            Бесплатно
-        {% else %}
-            Цена: {{ c.price }} BYN
-        {% endif %}
-        <div class="d-grid gap-2">
-            <a class="btn btn-secondary" href="{{ c.get_absolute_url }}">Подробнее</a>
+    <div class="card">
+        <div class="content">
+            <h2>{{ с.title }}</h2>
+            <h3>{{ c.title }}</h3><br>
+            <p>Дата создания: {{ c.time_created }}<br><br>
+                Дата изменения: {{ c.time_updated }}<br>
+                Автор: {{ c.author }} ({{ c.author.first_name }})<br>
+                {% if c.type_course == '1' %}
+                Бесплатно
+                {% else %}
+                Цена: {{ c.price }} BYN
+                {% endif %}
+            </p>
+            <a href="{{ c.get_absolute_url }}">Подробнее</a>
         </div>
     </div>
     {% endfor %}
-    <br>
     {% endif %}
 
-    <div style="width: 0; height: 0; margin-left: 50%; text-align: center; display: inline-flex; align-items: center; justify-content: center;">
-    <ul class="pagination">
-        <li class="page-item">
-      <a class="page-link" tabindex="-1" href="?page={{ 1 }}" style="color: black;">Начало</a>
-    </li>
-        {% for p in page_obj.paginator.page_range %}
-        <li class="page-item">
-            <a class="page-link" style="color: black;" href="?page={{ p }}">{{ p }}</a>
-        </li>
-        {% endfor %}
-         <li class="page-item">
-      <a class="page-link" tabindex="-1" href="?page=last" style="color: black;">Конец</a>
-    </li>
-    </ul>
-        </div>
+    <section class="section-pagination">
+        <ul class="pag-page">
+            <a tabindex="-1" href="?page={{ 1 }}">
+                <li>Начало</li>
+            </a>
+            {% for p in page_obj.paginator.page_range %}
+            {% if p == page_obj.number %}
+            <a href="?page={{ p }}" class="active">
+                <li>{{ p }}</li>
+            </a>
+            {% else %}
+            <a href="?page={{ p }}">
+                <li>{{ p }}</li>
+            </a>
+            {% endif %}
+            {% endfor %}
+            <a tabindex="-1" href="?page=last">
+                <li>Конец</li>
+            </a>
+        </ul>
+    </section>
 
-    <hr>
-    <h3>Категории:</h3>
+    <h2 align="center" style="color: white; width: 100%; margin-top: 30px;">Категории: </h2>
+
     {% for cats in categories %}
-    <a class="btn btn-secondary" style="margin-right: 3%; margin-bottom: 2%; width: 185px; height: 100px; display: inline-flex; align-items: center; justify-content: center;" href="{% url 'category_courses' cats.pk %}"> {{ cats.title }}</a>
+    <div class="card-cats">
+        <div class="cats">
+            <h2>{{ cats.title }}</h2>
+            <a href="{% url 'category_courses' cats.pk %}">{{ cats.title }}</a>
+        </div>
+    </div>
     {% endfor %}
-    <br><br><br>
+
+</section>
+</body>
+<script type="text/javascript" src="{% static 'courses/js/vanilla-tilt.js' %}"></script>
+<script>
+    VanillaTilt.init(document.querySelectorAll(".card"), {
+		max: 25,
+		speed: 400,
+		glare: true,
+		"max-glare": 1,
+	});
+	const menuHamburger = document.querySelector(".menu-hamburger")
+        const navLinks = document.querySelector(".nav-links")
+
+        menuHamburger.addEventListener('click',()=>{
+        navLinks.classList.toggle('mobile-menu')
+        })
+
+const button = document.querySelector("button"),
+      toast = document.querySelector(".toast")
+      closeIcon = document.querySelector(".close"),
+      progress = document.querySelector(".progress");
+      let timer1, timer2;
+      button.addEventListener("click", () => {
+        toast.classList.add("active");
+        progress.classList.add("active");
+        timer1 = setTimeout(() => {
+            toast.classList.remove("active");
+        }, 5000); //1s = 1000 milliseconds
+        timer2 = setTimeout(() => {
+          progress.classList.remove("active");
+        }, 5300);
+      });
+
+      closeIcon.addEventListener("click", () => {
+        toast.classList.remove("active");
+
+        setTimeout(() => {
+          progress.classList.remove("active");
+        }, 300);
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      });
+
+</script>
 
 
-</div>
-{% endblock %}
+</html>
